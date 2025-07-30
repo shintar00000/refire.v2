@@ -1084,9 +1084,87 @@ document.addEventListener('DOMContentLoaded', () => {
   new ScrollProgress();
   new PerformanceMonitor();
   new AccessibilityEnhancer();
+  new FloatingCTA(); // CVR最適化のためのフローティングCTA
   
   console.log('🔥 RE FIRE Website Loaded Successfully');
 });
+
+/**
+ * フローティングCTAボタン管理クラス
+ * スクロール位置に基づいてCTAボタンの表示/非表示を制御
+ * CVR向上を目的とした戦略的配置
+ */
+class FloatingCTA {
+  constructor() {
+    this.floatingCTA = $('#floating-cta');
+    this.heroSection = $('#home');
+    this.contactSection = $('#contact');
+    this.isVisible = false;
+    this.init();
+  }
+  
+  init() {
+    if (!this.floatingCTA) return;
+    
+    // スクロールイベント監視（パフォーマンス最適化済み）
+    const handleScroll = throttle(() => {
+      this.updateVisibility();
+    }, 100);
+    
+    window.addEventListener('scroll', handleScroll);
+    
+    // 初期状態設定
+    this.updateVisibility();
+  }
+  
+  /**
+   * スクロール位置に基づいてCTAボタンの表示状態を更新
+   * - ヒーローセクション通過後に表示
+   * - お問い合わせセクション到達時に非表示
+   */
+  updateVisibility() {
+    const scrollTop = window.pageYOffset || document.documentElement.scrollTop;
+    const windowHeight = window.innerHeight;
+    
+    // ヒーローセクションの底部座標
+    const heroBottom = this.heroSection ? this.heroSection.offsetTop + this.heroSection.offsetHeight : 0;
+    
+    // お問い合わせセクションの上部座標
+    const contactTop = this.contactSection ? this.contactSection.offsetTop : document.body.scrollHeight;
+    
+    // 表示条件：ヒーロー通過後 かつ お問い合わせ到達前
+    const shouldShow = scrollTop > heroBottom - windowHeight * 0.5 && 
+                      scrollTop < contactTop - windowHeight * 0.8;
+    
+    if (shouldShow && !this.isVisible) {
+      this.show();
+    } else if (!shouldShow && this.isVisible) {
+      this.hide();
+    }
+  }
+  
+  /**
+   * CTAボタンを表示
+   */
+  show() {
+    if (!this.floatingCTA) return;
+    
+    this.floatingCTA.classList.add('show');
+    this.floatingCTA.setAttribute('aria-hidden', 'false');
+    this.isVisible = true;
+  }
+  
+  /**
+   * CTAボタンを非表示
+   */
+  hide() {
+    if (!this.floatingCTA) return;
+    
+    this.floatingCTA.classList.remove('show');
+    this.floatingCTA.setAttribute('aria-hidden', 'true');
+    this.isVisible = false;
+  }
+}
 
 // Service Worker Registration for PWA capabilities
 if ('serviceWorker' in navigator) {
