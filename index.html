@@ -27,7 +27,8 @@
 </head>
 <body>
     <!-- Navigation -->
-    <nav class="navbar">
+    <header>
+        <nav class="navbar" role="navigation" aria-label="メインナビゲーション">
         <div class="nav-container">
             <div class="nav-logo">
                 <a href="#home">
@@ -48,34 +49,29 @@
                 <span></span>
             </div>
         </div>
-    </nav>
+        </nav>
+    </header>
 
-    <!-- Hero Section -->
-    <section id="home" class="hero">
-        <div class="hero-background">
-            <div class="hero-overlay"></div>
-            <img src="./image/20250623_1446_Firefighter's Hopeful Walk_simple_compose_01jydn3690ejr87nv1mxrq1t2k.png" alt="消防士の歩み" class="hero-image">
-        </div>
+    <!-- Main Content -->
+    <main>
+        <!-- Hero Section -->
+        <section id="home" class="hero" role="banner">
         <div class="hero-content">
             <div class="hero-text">
                 <h1 class="hero-title">
-                    <span class="title-main">義務の先にある</span>
-                    <span class="title-highlight">安心を守る</span>
+                    <span class="title-main">防火管理の面倒、</span><br>
+                    <span class="title-highlight">元消防士に丸投げしませんか？</span>
                 </h1>
-                <p class="hero-subtitle">防火管理を丸ごと代行します</p>
+                <p class="hero-subtitle">月額3万円〜で防火管理を完全代行</p>
                 <p class="hero-description">
-                    全スタッフ元消防士（災害最前線15年以上）の経験で<br>
-                    <strong>"法令+α"の真の安全</strong>を提供
+                    災害最前線15年以上の元消防士が<br>
+                    <strong>法令遵守から実際の安全対策まで</strong>すべてお任せ
                 </p>
                 <div class="hero-cta">
                     <a href="#contact" class="btn-primary">🔥 無料で一次診断を依頼する</a>
                     <a href="#service" class="btn-secondary">サービス詳細</a>
                 </div>
             </div>
-        </div>
-        <div class="hero-scroll">
-            <span>スクロール</span>
-            <div class="scroll-indicator"></div>
         </div>
     </section>
 
@@ -156,21 +152,21 @@
             <div class="usp-grid">
                 <div class="usp-card">
                     <div class="usp-image">
-                        <img src="./image/fire.png" alt="元消防専門チーム" class="usp-img">
+                        <img src="./image/fire.png" alt="元消防専門チーム" class="usp-img" loading="lazy" width="80" height="80">
                     </div>
                     <h3>元消防士が専門対応</h3>
                     <p>災害最前線で15年以上の実務経験を持つ元消防士が、法令遵守から実際の安全対策まで包括的にサポート</p>
                 </div>
                 <div class="usp-card">
                     <div class="usp-image">
-                        <img src="./image/daikou.webp" alt="完全代行サービス" class="usp-img">
+                        <img src="./image/daikou.webp" alt="完全代行サービス" class="usp-img" loading="lazy" width="80" height="80">
                     </div>
                     <h3>完全代行サービス</h3>
                     <p>防火管理者選任から消防計画作成、避難訓練実施まで、防火管理業務を丸ごとお任せいただけます</p>
                 </div>
                 <div class="usp-card">
                     <div class="usp-image">
-                        <img src="./image/jinnsoku.webp" alt="迅速な対応" class="usp-img">
+                        <img src="./image/jinnsoku.webp" alt="迅速な対応" class="usp-img" loading="lazy" width="80" height="80">
                     </div>
                     <h3>迅速な対応</h3>
                     <p>お客様のご要望に応じて最短での対応が可能。緊急時の相談も24時間受付しています</p>
@@ -512,7 +508,7 @@
     </section>
 
     <!-- About Section -->
-    <section id="about" class="about">
+    <section id="about" class="about" aria-labelledby="about-title">
         <div class="container">
             <div class="about-content">
                 <div class="about-text">
@@ -544,7 +540,7 @@
     </section>
 
     <!-- Contact Section -->
-    <section id="contact" class="contact">
+    <section id="contact" class="contact" aria-labelledby="contact-title">
         <div class="container">
             <div class="section-header">
                 <h2 class="section-title">お問い合わせ</h2>
@@ -558,7 +554,7 @@
                     
                 </div>
                 
-                <form class="contact-form" id="contact-form" name="contact" method="POST" data-netlify="true" netlify-honeypot="bot-field">
+                <form class="contact-form" id="contact-form" name="contact" method="POST" data-netlify="true" netlify-honeypot="bot-field" aria-labelledby="contact-title">
                     <!-- Honeypot field for spam protection -->
                     <div style="display: none;">
                         <label for="bot-field">このフィールドは入力しないでください：</label>
@@ -566,13 +562,13 @@
                     </div>
                     
                     <div class="form-group">
-                        <label for="company">会社名 <span class="required">*</span></label>
-                        <input type="text" id="company" name="company" required placeholder="株式会社○○○">
+                        <label for="company">会社名 <span class="required" aria-label="必須項目">*</span></label>
+                        <input type="text" id="company" name="company" required placeholder="株式会社○○○" maxlength="100" autocomplete="organization" aria-describedby="company-help">
                     </div>
                     
                     <div class="form-group">
                         <label for="contact">お名前または連絡先 <span class="required">*</span></label>
-                        <input type="text" id="contact" name="contact" required placeholder="山田太郎 または 03-1234-5678">
+                        <input type="text" id="contact" name="contact" required placeholder="山田太郎 または 03-1234-5678" maxlength="100" autocomplete="name" aria-describedby="contact-help">
                     </div>
                     
                     <div class="form-group">
@@ -590,7 +586,7 @@
                     
                     <div class="form-group">
                         <label for="message">ご要望・ご質問</label>
-                        <textarea id="message" name="message" rows="3" placeholder="現在の状況やご要望などをお聞かせください（任意）"></textarea>
+                        <textarea id="message" name="message" rows="3" placeholder="現在の状況やご要望などをお聞かせください（任意）" maxlength="500" autocomplete="off"></textarea>
                     </div>
                     
                     <div class="form-group">
@@ -607,8 +603,10 @@
         </div>
     </section>
 
+    </main>
+
     <!-- Footer -->
-    <footer class="footer">
+    <footer class="footer" role="contentinfo">
         <div class="container">
             <div class="footer-content">
                 <div class="footer-logo">

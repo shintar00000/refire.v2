@@ -1,36 +1,82 @@
-// Modern JavaScript for RE FIRE Website
+/**
+ * RE FIRE Website - Modern JavaScript Architecture
+ * セキュリティ強化とパフォーマンス最適化を重視した実装
+ * 
+ * @version 2.0.0
+ * @security XSS攻撃対策強化、CSP対応
+ * @performance レイジーローディング、コード分割対応
+ */
 'use strict';
 
-// Utility functions
-const $ = (selector) => document.querySelector(selector);
-const $$ = (selector) => document.querySelectorAll(selector);
+// DOM Utility functions - セキュリティ向上のため型チェック付き
+const $ = (selector) => {
+  if (typeof selector !== 'string') return null;
+  return document.querySelector(selector);
+};
 
-// Throttle function for performance optimization
+const $$ = (selector) => {
+  if (typeof selector !== 'string') return [];
+  return document.querySelectorAll(selector);
+};
+
+/**
+ * パフォーマンス最適化のためのThrottle関数
+ * @param {Function} func - 実行する関数
+ * @param {number} delay - 遅延ミリ秒
+ * @returns {Function} スロットル化された関数
+ */
 const throttle = (func, delay) => {
+  if (typeof func !== 'function') {
+    console.error('throttle: first argument must be a function');
+    return () => {};
+  }
+  
   let timeoutId;
   let lastExecTime = 0;
+  
   return function (...args) {
     const currentTime = Date.now();
     
-    if (currentTime - lastExecTime > delay) {
-      func.apply(this, args);
-      lastExecTime = currentTime;
-    } else {
-      clearTimeout(timeoutId);
-      timeoutId = setTimeout(() => {
+    try {
+      if (currentTime - lastExecTime > delay) {
         func.apply(this, args);
-        lastExecTime = Date.now();
-      }, delay - (currentTime - lastExecTime));
+        lastExecTime = currentTime;
+      } else {
+        clearTimeout(timeoutId);
+        timeoutId = setTimeout(() => {
+          func.apply(this, args);
+          lastExecTime = Date.now();
+        }, delay - (currentTime - lastExecTime));
+      }
+    } catch (error) {
+      console.error('Error in throttled function:', error);
     }
   };
 };
 
-// Debounce function
+/**
+ * デバウンス関数 - 連続した呼び出しを制限
+ * @param {Function} func - 実行する関数
+ * @param {number} delay - 遅延ミリ秒
+ * @returns {Function} デバウンス化された関数
+ */
 const debounce = (func, delay) => {
+  if (typeof func !== 'function') {
+    console.error('debounce: first argument must be a function');
+    return () => {};
+  }
+  
   let timeoutId;
+  
   return function (...args) {
     clearTimeout(timeoutId);
-    timeoutId = setTimeout(() => func.apply(this, args), delay);
+    timeoutId = setTimeout(() => {
+      try {
+        func.apply(this, args);
+      } catch (error) {
+        console.error('Error in debounced function:', error);
+      }
+    }, delay);
   };
 };
 
@@ -254,6 +300,27 @@ class ContactForm {
     
     this.clearError(field);
     
+    // XSS防止：危険な文字をチェック（強化版）
+    const dangerousChars = /<script|javascript:|data:|vbscript:|onload|onerror|onclick|onmouseover|eval\(|expression\(|&#x|&lt;|&gt;/i;
+    if (dangerousChars.test(value)) {
+      this.showError(field, '不正な文字が含まれています');
+      return false;
+    }
+    
+    // SQLインジェクション防止
+    const sqlChars = /('|(--)|(\|)|(%7C)|(;)|(\*)|(%2A)|(\s+(or|and|union|select|insert|delete|update|drop|create|alter)\s+)/i;
+    if (sqlChars.test(value)) {
+      this.showError(field, '不正な文字が含まれています');
+      return false;
+    }
+    
+    // 文字数制限（より厳格に）
+    const fieldMaxLength = field.getAttribute('maxlength') ? parseInt(field.getAttribute('maxlength')) : 1000;
+    if (value.length > fieldMaxLength) {
+      this.showError(field, `文字数が上限を超えています（${fieldMaxLength}文字以内）`);
+      return false;
+    }
+    
     if (isRequired && !value) {
       this.showError(field, 'この項目は必須です');
       return false;
@@ -361,12 +428,21 @@ class ContactForm {
   showSuccessMessage() {
     const message = document.createElement('div');
     message.className = 'success-message';
-    message.innerHTML = `
-      <div style="background: #00A3FF; color: white; padding: 1rem; border-radius: 8px; margin-bottom: 1rem;">
-        <strong>✓ 送信完了</strong><br>
-        お問い合わせありがとうございます。24時間以内にご連絡いたします。
-      </div>
-    `;
+    // セキュリティ向上：textContentを使用してXSS防止
+    const messageContent = document.createElement('div');
+    messageContent.style.cssText = 'background: #00A3FF; color: white; padding: 1rem; border-radius: 8px; margin-bottom: 1rem;';
+    
+    const title = document.createElement('strong');
+    title.textContent = '✓ 送信完了';
+    
+    const description = document.createElement('p');
+    description.textContent = 'お問い合わせありがとうございます。24時間以内にご連絡いたします。';
+    description.style.margin = '0.5rem 0 0 0';
+    
+    messageContent.appendChild(title);
+    messageContent.appendChild(document.createElement('br'));
+    messageContent.appendChild(description);
+    message.appendChild(messageContent);
     
     this.form.parentNode.insertBefore(message, this.form);
     
@@ -378,12 +454,22 @@ class ContactForm {
   showErrorMessage(text) {
     const message = document.createElement('div');
     message.className = 'error-message';
-    message.innerHTML = `
-      <div style="background: #FF4E00; color: white; padding: 1rem; border-radius: 8px; margin-bottom: 1rem;">
-        <strong>⚠ エラー</strong><br>
-        ${text}
-      </div>
-    `;
+    
+    // セキュリティ向上：innerHTML を避けて createElement を使用
+    const errorDiv = document.createElement('div');
+    errorDiv.style.cssText = 'background: #FF4E00; color: white; padding: 1rem; border-radius: 8px; margin-bottom: 1rem;';
+    
+    const title = document.createElement('strong');
+    title.textContent = '⚠ エラー';
+    
+    const br = document.createElement('br');
+    
+    const textNode = document.createTextNode(text);
+    
+    errorDiv.appendChild(title);
+    errorDiv.appendChild(br);
+    errorDiv.appendChild(textNode);
+    message.appendChild(errorDiv);
     
     this.form.parentNode.insertBefore(message, this.form);
     
@@ -431,121 +517,237 @@ class ParallaxEffect {
 // Loading Animation
 class LoadingAnimation {
   constructor() {
+    console.log('LoadingAnimation constructor called');
     this.init();
   }
   
   init() {
-    // Add loading screen
+    console.log('LoadingAnimation init started');
+    // Add loading screen - セキュリティ向上：innerHTML の代わりに createElement を使用
     const loadingScreen = document.createElement('div');
     loadingScreen.id = 'loading-screen';
-    loadingScreen.innerHTML = `
-      <div style="
-        position: fixed;
-        top: 0;
-        left: 0;
-        width: 100%;
-        height: 100%;
-        background: linear-gradient(135deg, #000000 0%, #1a1a1a 100%);
-        display: flex;
-        align-items: center;
-        justify-content: center;
-        z-index: 9999;
-        transition: opacity 0.8s ease-out;
-      ">
-        <div class="loading-content" style="
-          text-align: center; 
-          color: white;
-          max-width: 400px;
-          padding: 2rem;
-        ">
-          <div class="logo-container" style="
-            margin-bottom: 2rem;
-            animation: logoEntry 1.2s ease-out;
-          ">
-            <img src="./logo/3BD52A16-41AE-4569-9508-0B5A617F9B5C.jpeg" 
-                 alt="RE FIRE" 
-                 style="
-                   height: 150px; 
-                   width: auto;
-                   margin-bottom: 1rem;
-                   filter: drop-shadow(0 4px 20px rgba(0, 163, 255, 0.3));
-                   animation: logoGlow 2s ease-in-out infinite alternate;
-                 ">
-          </div>
-          
-          <div class="company-info" style="
-            animation: textSlideUp 1.5s ease-out 0.5s both;
-          ">
-            <h1 style="
-              font-size: 2.5rem;
-              font-weight: 900;
-              margin-bottom: 0.5rem;
-              background: linear-gradient(135deg, #00A3FF 0%, #ffffff 50%, #FF4E00 100%);
-              -webkit-background-clip: text;
-              -webkit-text-fill-color: transparent;
-              background-clip: text;
-              line-height: 1.2;
-            ">RE FIRE</h1>
-            
-            <div class="service-description" style="
-              font-size: 1.2rem;
-              color: #00A3FF;
-              font-weight: 600;
-              margin-bottom: 1.5rem;
-              animation: serviceTextType 2s ease-out 1s both;
-            ">
-              <span class="typing-text"></span>
-              <span class="cursor" style="
-                animation: blink 1s infinite;
-                color: #FF4E00;
-                font-weight: bold;
-              ">|</span>
-            </div>
-            
-            <div class="tagline" style="
-              font-size: 1rem;
-              color: #ffffff;
-              opacity: 0.9;
-              font-style: italic;
-              animation: fadeInUp 1.8s ease-out 1.8s both;
-            ">
-              義務の先にある安心を守る
-            </div>
-          </div>
-          
-          <div class="loading-progress" style="
-            margin-top: 2rem;
-            animation: progressBarEntry 2s ease-out 2.2s both;
-          ">
-            <div style="
-              width: 200px; 
-              height: 4px; 
-              background: rgba(255, 255, 255, 0.2); 
-              margin: 0 auto;
-              border-radius: 2px;
-              overflow: hidden;
-            ">
-              <div style="
-                width: 0%; 
-                height: 100%; 
-                background: linear-gradient(90deg, #00A3FF 0%, #FF4E00 100%);
-                animation: loadingProgress 2.5s ease-in-out 2.5s both;
-                border-radius: 2px;
-              "></div>
-            </div>
-            <div style="
-              margin-top: 1rem;
-              font-size: 0.9rem;
-              color: rgba(255, 255, 255, 0.7);
-              animation: loadingText 3s ease-out 2.8s both;
-            ">
-              <span class="loading-status">システム準備中...</span>
-            </div>
-          </div>
-        </div>
-      </div>
-      
-      <style>
+    
+    // メインコンテナの作成
+    const mainContainer = document.createElement('div');
+    mainContainer.style.cssText = `
+      position: fixed;
+      top: 0;
+      left: 0;
+      width: 100%;
+      height: 100%;
+      background: linear-gradient(135deg, #000000 0%, #1a1a1a 100%);
+      display: flex;
+      align-items: center;
+      justify-content: center;
+      z-index: 9999;
+      transition: opacity 0.8s ease-out;
+    `;
+    
+    // 背景画像の作成
+    const backgroundDiv = document.createElement('div');
+    backgroundDiv.style.cssText = `
+      position: absolute;
+      top: 0;
+      left: 0;
+      width: 100%;
+      height: 100%;
+      background-image: url("./image/20250623_1446_Firefighter's Hopeful Walk_simple_compose_01jydn3690ejr87nv1mxrq1t2k.png");
+      background-size: cover;
+      background-position: center;
+      background-repeat: no-repeat;
+      opacity: 0.3;
+      filter: blur(0.5px);
+      z-index: 1;
+      animation: backgroundFadeIn 1.5s ease-out 0.5s forwards;
+    `;
+    
+    // コンテンツコンテナの作成
+    const loadingContent = document.createElement('div');
+    loadingContent.className = 'loading-content';
+    loadingContent.style.cssText = `
+      text-align: center; 
+      color: white;
+      max-width: 600px;
+      padding: 2rem;
+      position: relative;
+      z-index: 2;
+    `;
+    
+    // ロゴコンテナの作成
+    const logoContainer = document.createElement('div');
+    logoContainer.className = 'logo-container';
+    logoContainer.style.cssText = `
+      margin-bottom: 3rem;
+      animation: logoEntry 1.2s ease-out;
+    `;
+    
+    const logoImg = document.createElement('img');
+    logoImg.src = "./logo/3BD52A16-41AE-4569-9508-0B5A617F9B5C.jpeg";
+    logoImg.alt = "RE FIRE";
+    logoImg.style.cssText = `
+      height: 150px; 
+      width: auto;
+      margin-bottom: 1rem;
+      filter: drop-shadow(0 4px 20px rgba(0, 163, 255, 0.3));
+      animation: logoGlow 2s ease-in-out infinite alternate;
+    `;
+    
+    // キャッチフレーズ要素の作成
+    const catchPhrase1 = document.createElement('div');
+    catchPhrase1.className = 'catch-phrase-line1';
+    catchPhrase1.textContent = '防火管理の面倒、';
+    catchPhrase1.style.cssText = `
+      font-size: clamp(1.8rem, 4vw, 2.8rem);
+      font-weight: 900;
+      margin-bottom: 1rem;
+      color: #ffffff;
+      opacity: 0;
+      animation: slowTextReveal 1.5s ease-out 0.5s forwards;
+      text-shadow: 0 2px 10px rgba(0, 0, 0, 0.7);
+    `;
+    
+    const catchPhrase2 = document.createElement('div');
+    catchPhrase2.className = 'catch-phrase-line2';
+    catchPhrase2.textContent = '元消防士に丸投げしませんか？';
+    catchPhrase2.style.cssText = `
+      font-size: clamp(1.8rem, 4vw, 2.8rem);
+      font-weight: 900;
+      background: linear-gradient(135deg, #00A3FF 0%, #00c6ff 100%);
+      -webkit-background-clip: text;
+      -webkit-text-fill-color: transparent;
+      background-clip: text;
+      opacity: 0;
+      animation: slowTextReveal 1.5s ease-out 2s forwards;
+      text-shadow: 0 2px 10px rgba(0, 163, 255, 0.5);
+      margin-bottom: 2rem;
+    `;
+    
+    // サブタイトルの作成
+    const heroSubtitle = document.createElement('div');
+    heroSubtitle.className = 'hero-subtitle-new';
+    heroSubtitle.textContent = '月額3万円〜で防火管理を完全代行';
+    heroSubtitle.style.cssText = `
+      font-size: clamp(1.2rem, 3vw, 1.8rem);
+      font-weight: 500;
+      margin-bottom: 1rem;
+      color: #00A3FF;
+      opacity: 0;
+      animation: slowTextReveal 1s ease-out 3.5s forwards;
+      text-shadow: 0 2px 8px rgba(0, 163, 255, 0.3);
+    `;
+    
+    // 説明文の作成
+    const heroDescription = document.createElement('div');
+    heroDescription.className = 'hero-description-new';
+    heroDescription.style.cssText = `
+      font-size: clamp(1rem, 2vw, 1.2rem);
+      margin-bottom: 2rem;
+      opacity: 0;
+      color: #ffffff;
+      animation: slowTextReveal 1s ease-out 4.5s forwards;
+      text-shadow: 0 2px 8px rgba(0, 0, 0, 0.7);
+      line-height: 1.6;
+    `;
+    
+    const descriptionText1 = document.createTextNode('災害最前線15年以上の元消防士が');
+    const br = document.createElement('br');
+    const strongText = document.createElement('strong');
+    strongText.textContent = '法令遵守から実際の安全対策まで';
+    strongText.style.color = '#00A3FF';
+    const descriptionText2 = document.createTextNode('すべてお任せ');
+    
+    heroDescription.appendChild(descriptionText1);
+    heroDescription.appendChild(br);
+    heroDescription.appendChild(strongText);
+    heroDescription.appendChild(descriptionText2);
+    
+    // CTAボタンコンテナの作成
+    const heroCta = document.createElement('div');
+    heroCta.className = 'hero-cta-new';
+    heroCta.style.cssText = `
+      display: flex;
+      gap: 1rem;
+      justify-content: center;
+      flex-wrap: wrap;
+      opacity: 0;
+      animation: slowTextReveal 1s ease-out 5.5s forwards;
+    `;
+    
+    // セキュリティ向上：インラインイベントハンドラーを削除してaddEventListenerを使用
+    const primaryBtn = document.createElement('a');
+    primaryBtn.href = '#contact';
+    primaryBtn.textContent = '🔥 無料で一次診断を依頼する';
+    primaryBtn.style.cssText = `
+      display: inline-block;
+      padding: 1rem 2rem;
+      border-radius: 8px;
+      text-decoration: none;
+      font-weight: 600;
+      transition: all 0.3s ease;
+      background: linear-gradient(135deg, #00A3FF 0%, #0085cc 100%);
+      color: white;
+      box-shadow: 0 4px 16px rgba(0, 163, 255, 0.3);
+      transform: translateY(0);
+    `;
+    
+    // セキュアなイベントリスナーの追加
+    primaryBtn.addEventListener('mouseover', () => {
+      primaryBtn.style.transform = 'translateY(-3px)';
+      primaryBtn.style.boxShadow = '0 6px 20px rgba(0, 163, 255, 0.4)';
+    });
+    
+    primaryBtn.addEventListener('mouseout', () => {
+      primaryBtn.style.transform = 'translateY(0)';
+      primaryBtn.style.boxShadow = '0 4px 16px rgba(0, 163, 255, 0.3)';
+    });
+    
+    const secondaryBtn = document.createElement('a');
+    secondaryBtn.href = '#service';
+    secondaryBtn.textContent = 'サービス詳細';
+    secondaryBtn.style.cssText = `
+      display: inline-block;
+      padding: 1rem 2rem;
+      border-radius: 8px;
+      text-decoration: none;
+      font-weight: 600;
+      transition: all 0.3s ease;
+      background: transparent;
+      color: white;
+      border: 2px solid white;
+      transform: translateY(0);
+    `;
+    
+    secondaryBtn.addEventListener('mouseover', () => {
+      secondaryBtn.style.transform = 'translateY(-3px)';
+      secondaryBtn.style.background = 'white';
+      secondaryBtn.style.color = 'black';
+    });
+    
+    secondaryBtn.addEventListener('mouseout', () => {
+      secondaryBtn.style.transform = 'translateY(0)';
+      secondaryBtn.style.background = 'transparent';
+      secondaryBtn.style.color = 'white';
+    });
+    
+    // 要素の組み立て
+    logoContainer.appendChild(logoImg);
+    heroCta.appendChild(primaryBtn);
+    heroCta.appendChild(secondaryBtn);
+    
+    loadingContent.appendChild(logoContainer);
+    loadingContent.appendChild(catchPhrase1);
+    loadingContent.appendChild(catchPhrase2);
+    loadingContent.appendChild(heroSubtitle);
+    loadingContent.appendChild(heroDescription);
+    loadingContent.appendChild(heroCta);
+    
+    mainContainer.appendChild(backgroundDiv);
+    mainContainer.appendChild(loadingContent);
+    loadingScreen.appendChild(mainContainer);
+    
+    // CSSスタイルを追加
+    const style = document.createElement('style');
+    style.textContent = `
         @keyframes logoEntry {
           0% { 
             opacity: 0; 
@@ -558,6 +760,32 @@ class LoadingAnimation {
           100% { 
             opacity: 1; 
             transform: scale(1) rotateY(0deg); 
+          }
+        }
+        
+        @keyframes backgroundFadeIn {
+          0% { 
+            opacity: 0; 
+            transform: scale(1.1); 
+          }
+          100% { 
+            opacity: 0.3; 
+            transform: scale(1); 
+          }
+        }
+        
+        @keyframes slowTextReveal {
+          0% { 
+            opacity: 0; 
+            transform: translateY(30px) scale(0.9); 
+          }
+          50% {
+            opacity: 0.7;
+            transform: translateY(10px) scale(0.95);
+          }
+          100% { 
+            opacity: 1; 
+            transform: translateY(0) scale(1); 
           }
         }
         
@@ -644,59 +872,34 @@ class LoadingAnimation {
             height: 120px !important;
           }
         }
-      </style>
     `;
     
+    document.head.appendChild(style);
+    
     document.body.appendChild(loadingScreen);
+    console.log('Loading screen added to DOM');
     
-    // Typing animation for service description
-    const typingText = loadingScreen.querySelector('.typing-text');
-    const serviceText = '防火管理代行サービス';
-    let charIndex = 0;
+    // No typing animation needed - direct content display
     
-    const typeService = () => {
-      if (charIndex < serviceText.length) {
-        typingText.textContent += serviceText.charAt(charIndex);
-        charIndex++;
-        setTimeout(typeService, 100);
-      }
-    };
-    
-    // Start typing animation after delay
-    setTimeout(typeService, 1000);
-    
-    // Update loading status text
-    const loadingStatus = loadingScreen.querySelector('.loading-status');
-    const statusTexts = [
-      'システム準備中...',
-      '防火管理システム初期化中...',
-      '安全システム確認中...',
-      '準備完了'
-    ];
-    let statusIndex = 0;
-    
-    const updateStatus = () => {
-      if (statusIndex < statusTexts.length - 1) {
-        setTimeout(() => {
-          statusIndex++;
-          if (loadingStatus) {
-            loadingStatus.textContent = statusTexts[statusIndex];
-          }
-          updateStatus();
-        }, 800);
-      }
-    };
-    
-    setTimeout(updateStatus, 3000);
-    
-    // Remove loading screen when page is loaded
+    // Seamlessly transition to hero section
     window.addEventListener('load', () => {
+      console.log('Page loaded, starting seamless transition to hero');
       setTimeout(() => {
+        console.log('Starting seamless transition');
+        
+        // Instead of removing, transform loading screen to match hero section
+        loadingScreen.style.position = 'absolute';
+        loadingScreen.style.zIndex = '1';
+        
+        // Fade out gradually to reveal hero section underneath
+        loadingScreen.style.transition = 'opacity 2s ease-out';
         loadingScreen.style.opacity = '0';
+        
         setTimeout(() => {
+          console.log('Removing loading screen from DOM');
           loadingScreen.remove();
-        }, 800);
-      }, 5500); // Extended timing for full animation experience
+        }, 2000);
+      }, 7000); // Allow time to see all animations
     });
   }
 }
@@ -870,19 +1073,14 @@ class AccessibilityEnhancer {
 
 // Initialize all modules when DOM is ready
 document.addEventListener('DOMContentLoaded', () => {
-  // Check if user has visited before
-  const hasVisited = localStorage.getItem('refire-visited');
-  
-  if (!hasVisited) {
-    new LoadingAnimation();
-    localStorage.setItem('refire-visited', 'true');
-  }
+  console.log('DOM Content Loaded - Starting initialization');
   
   // Initialize all components
   new Navigation();
   new AnimationObserver();
   new ContactForm();
   new ParallaxEffect();
+  new LoadingAnimation(); // セキュリティ向上後のロードアニメーション
   new ScrollProgress();
   new PerformanceMonitor();
   new AccessibilityEnhancer();

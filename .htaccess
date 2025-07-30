@@ -1,0 +1,90 @@
+# REFIREプロジェクト - セキュリティ強化設定
+# Content Security Policy (CSP) ヘッダー実装
+
+# XSS攻撃防止 - 厳格なCSPポリシー
+Header always set Content-Security-Policy "\
+  default-src 'self'; \
+  script-src 'self' 'sha256-' https://unpkg.com https://fonts.googleapis.com https://www.google-analytics.com https://www.googletagmanager.com; \
+  style-src 'self' 'unsafe-inline' https://fonts.googleapis.com https://fonts.gstatic.com; \
+  img-src 'self' data: https: blob:; \
+  font-src 'self' https://fonts.gstatic.com data:; \
+  connect-src 'self' https://www.google-analytics.com; \
+  media-src 'self'; \
+  object-src 'none'; \
+  frame-src 'none'; \
+  base-uri 'self'; \
+  form-action 'self';"
+
+# X-Frame-Options でクリックジャッキング攻撃防止
+Header always set X-Frame-Options "DENY"
+
+# X-Content-Type-Options でMIMEタイプ嗅探攻撃防止
+Header always set X-Content-Type-Options "nosniff"
+
+# X-XSS-Protection でXSS攻撃防止（古いブラウザサポート）
+Header always set X-XSS-Protection "1; mode=block"
+
+# Referrer-Policy でリファラー情報の制限
+Header always set Referrer-Policy "strict-origin-when-cross-origin"
+
+# Permissions-Policy で不要な機能の無効化
+Header always set Permissions-Policy "\
+  geolocation=(), \
+  microphone=(), \
+  camera=(), \
+  payment=(), \
+  usb=(), \
+  magnetometer=(), \
+  gyroscope=(), \
+  accelerometer=()"
+
+# Strict-Transport-Security でHTTPS強制（HTTPS環境でのみ有効）
+# Header always set Strict-Transport-Security "max-age=31536000; includeSubDomains; preload"
+
+# リソース最適化
+<IfModule mod_deflate.c>
+    # テキストファイルの圧縮を有効化
+    AddOutputFilterByType DEFLATE text/plain
+    AddOutputFilterByType DEFLATE text/html
+    AddOutputFilterByType DEFLATE text/xml
+    AddOutputFilterByType DEFLATE text/css
+    AddOutputFilterByType DEFLATE application/xml
+    AddOutputFilterByType DEFLATE application/xhtml+xml
+    AddOutputFilterByType DEFLATE application/rss+xml
+    AddOutputFilterByType DEFLATE application/javascript
+    AddOutputFilterByType DEFLATE application/x-javascript
+</IfModule>
+
+# キャッシュ制御
+<IfModule mod_expires.c>
+    ExpiresActive On
+    ExpiresByType text/css "access plus 1 year"
+    ExpiresByType application/javascript "access plus 1 year"
+    ExpiresByType image/png "access plus 1 year"
+    ExpiresByType image/jpg "access plus 1 year"
+    ExpiresByType image/jpeg "access plus 1 year"
+    ExpiresByType image/gif "access plus 1 year"
+    ExpiresByType image/webp "access plus 1 year"
+    ExpiresByType text/html "access plus 1 hour"
+</IfModule>
+
+# ファイルアクセス制限
+<Files ".htaccess">
+    Require all denied
+</Files>
+
+<Files "*.md">
+    Require all denied
+</Files>
+
+<Files "ssh_test.txt">
+    Require all denied
+</Files>
+
+# セキュリティ情報の隠蔽
+ServerTokens Prod
+ServerSignature Off
+
+# エラーページのカスタマイズ（オプション）
+# ErrorDocument 404 /404.html
+# ErrorDocument 500 /500.html
