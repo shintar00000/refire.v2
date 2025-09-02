@@ -271,11 +271,35 @@ class AnimationObserver {
 // Contact Form Handler
 class ContactForm {
   constructor() {
+    console.log('🚀 ContactForm constructor starting...');
+    
     this.form = $('#contact-form');
     this.submitButton = $('.btn-submit');
     
+    // より詳細な要素チェック
+    console.log('📋 Form element:', this.form);
+    console.log('🔘 Submit button element:', this.submitButton);
+    
+    // 代替セレクターでも確認
+    const altSubmitButton = $('button[type="submit"]');
+    console.log('🔘 Alt submit button:', altSubmitButton);
+    
+    if (!this.submitButton && altSubmitButton) {
+      console.log('✅ Using alternative submit button selector');
+      this.submitButton = altSubmitButton;
+    }
+    
+    console.log('🔥 ContactForm initialized:', {
+      form: !!this.form,
+      submitButton: !!this.submitButton,
+      formId: this.form ? this.form.id : 'null',
+      buttonClass: this.submitButton ? this.submitButton.className : 'null'
+    });
+    
     if (this.form) {
       this.init();
+    } else {
+      console.error('❌ Contact form not found');
     }
   }
   
@@ -283,6 +307,7 @@ class ContactForm {
     this.setupFormValidation();
     this.setupFormSubmission();
     this.setupHoneypot();
+    this.setupPrivacyControl();
   }
   
   setupFormValidation() {
@@ -308,7 +333,7 @@ class ContactForm {
     }
     
     // SQLインジェクション防止
-    const sqlChars = /('|(--)|(\|)|(%7C)|(;)|(\*)|(%2A)|(\s+(or|and|union|select|insert|delete|update|drop|create|alter)\s+)/i;
+    const sqlChars = /('|--|;|\*|union|select|insert|delete|update|drop|create|alter)/i;
     if (sqlChars.test(value)) {
       this.showError(field, '不正な文字が含まれています');
       return false;
@@ -368,13 +393,15 @@ class ContactForm {
   }
   
   setupFormSubmission() {
-    this.form.addEventListener('submit', async (e) => {
-      e.preventDefault();
-      
+    this.form.addEventListener('submit', (e) => {
       const isValid = this.validateForm();
-      if (!isValid) return;
+      if (!isValid) {
+        e.preventDefault();
+        return;
+      }
       
-      await this.submitForm();
+      // FormSubmit用: バリデーション通過時は自然なフォーム送信を許可
+      // ネイティブのPOST送信でFormSubmitサービスに送信される
     });
   }
   
@@ -391,65 +418,6 @@ class ContactForm {
     return isValid;
   }
   
-  async submitForm() {
-    const formData = new FormData(this.form);
-    const data = Object.fromEntries(formData.entries());
-    
-    // Show loading state
-    const originalText = this.submitButton.textContent;
-    this.submitButton.textContent = '送信中...';
-    this.submitButton.disabled = true;
-    
-    try {
-      // Simulate API call (replace with actual endpoint)
-      await new Promise(resolve => setTimeout(resolve, 2000));
-      
-      // Success handling
-      this.showSuccessMessage();
-      this.form.reset();
-      
-      // Analytics tracking
-      if (typeof gtag !== 'undefined') {
-        gtag('event', 'form_submit', {
-          'event_category': 'contact',
-          'event_label': 'contact_form'
-        });
-      }
-      
-    } catch (error) {
-      this.showErrorMessage('送信に失敗しました。しばらく後に再試行してください。');
-      console.error('Form submission error:', error);
-    } finally {
-      this.submitButton.textContent = originalText;
-      this.submitButton.disabled = false;
-    }
-  }
-  
-  showSuccessMessage() {
-    const message = document.createElement('div');
-    message.className = 'success-message';
-    // セキュリティ向上：textContentを使用してXSS防止
-    const messageContent = document.createElement('div');
-    messageContent.style.cssText = 'background: #00A3FF; color: white; padding: 1rem; border-radius: 8px; margin-bottom: 1rem;';
-    
-    const title = document.createElement('strong');
-    title.textContent = '✓ 送信完了';
-    
-    const description = document.createElement('p');
-    description.textContent = 'お問い合わせありがとうございます。24時間以内にご連絡いたします。';
-    description.style.margin = '0.5rem 0 0 0';
-    
-    messageContent.appendChild(title);
-    messageContent.appendChild(document.createElement('br'));
-    messageContent.appendChild(description);
-    message.appendChild(messageContent);
-    
-    this.form.parentNode.insertBefore(message, this.form);
-    
-    setTimeout(() => {
-      message.remove();
-    }, 5000);
-  }
   
   showErrorMessage(text) {
     const message = document.createElement('div');
@@ -490,6 +458,167 @@ class ContactForm {
     honeypot.setAttribute('autocomplete', 'off');
     
     this.form.appendChild(honeypot);
+  }
+  
+  /**
+   * 🔒 プライバシーポリシー同意制御
+   * 同意チェックボックスの状態に応じて送信ボタンを制御
+   */
+  setupPrivacyControl() {
+    const privacyCheckbox = $('#privacy');
+    const submitButton = this.submitButton;
+    const helpText = $('#privacy-help');
+    
+    console.log('🔒 Privacy control setup:', {
+      privacyCheckbox: !!privacyCheckbox,
+      privacyCheckboxId: privacyCheckbox ? privacyCheckbox.id : 'NOT_FOUND',
+      submitButton: !!submitButton,
+      submitButtonClass: submitButton ? submitButton.className : 'NOT_FOUND',
+      helpText: !!helpText
+    });
+    
+    // DOM要素の詳細確認
+    if (privacyCheckbox) {
+      console.log('📋 Checkbox element details:', {
+        id: privacyCheckbox.id,
+        name: privacyCheckbox.name,
+        type: privacyCheckbox.type,
+        checked: privacyCheckbox.checked,
+        required: privacyCheckbox.required
+      });
+    }
+    
+    if (!privacyCheckbox) {
+      console.error('❌ Privacy checkbox (#privacy) not found in DOM');
+      // 代替手段：querySelectorで再試行
+      const alternativeCheckbox = document.querySelector('input[name="privacy"]');
+      console.log('🔄 Alternative search result:', !!alternativeCheckbox);
+      if (alternativeCheckbox) {
+        console.log('✅ Found checkbox by name selector');
+        return this.setupPrivacyControlAlternative(alternativeCheckbox, submitButton, helpText);
+      }
+      return;
+    }
+    
+    if (!submitButton) {
+      console.error('❌ Submit button (.btn-submit) not found in DOM');
+      return;
+    }
+    
+    // 初期状態：送信ボタン無効
+    console.log('🔧 Setting initial disabled state');
+    this.updateSubmitButton(false, submitButton, helpText);
+    
+    // チェックボックス変更時の処理
+    privacyCheckbox.addEventListener('change', (e) => {
+      const isChecked = e.target.checked;
+      console.log(`📋 Privacy checkbox changed: ${isChecked ? 'CHECKED' : 'UNCHECKED'}`);
+      this.updateSubmitButton(isChecked, submitButton, helpText);
+      
+      // アクセシビリティ：スクリーンリーダー用の音声フィードバック
+      if (isChecked) {
+        this.announceToScreenReader('送信ボタンが有効になりました');
+      } else {
+        this.announceToScreenReader('送信ボタンが無効になりました');
+      }
+    });
+    
+    // 追加のイベントリスナー（クリックも検出）
+    privacyCheckbox.addEventListener('click', (e) => {
+      console.log('🖱️ Privacy checkbox clicked');
+      setTimeout(() => {
+        const isChecked = e.target.checked;
+        console.log(`📋 After click - checkbox state: ${isChecked}`);
+        this.updateSubmitButton(isChecked, submitButton, helpText);
+      }, 10);
+    });
+  }
+  
+  /**
+   * 🔄 代替プライバシー制御セットアップ
+   * @param {HTMLElement} checkbox - チェックボックス要素
+   * @param {HTMLElement} submitButton - 送信ボタン要素
+   * @param {HTMLElement} helpText - ヘルプテキスト要素
+   */
+  setupPrivacyControlAlternative(checkbox, submitButton, helpText) {
+    console.log('🔧 Setting up alternative privacy control');
+    
+    // 初期状態：送信ボタン無効
+    this.updateSubmitButton(false, submitButton, helpText);
+    
+    // チェックボックス変更時の処理
+    checkbox.addEventListener('change', (e) => {
+      const isChecked = e.target.checked;
+      console.log(`📋 Alternative checkbox changed: ${isChecked ? 'CHECKED' : 'UNCHECKED'}`);
+      this.updateSubmitButton(isChecked, submitButton, helpText);
+    });
+    
+    // クリックイベントも追加
+    checkbox.addEventListener('click', (e) => {
+      console.log('🖱️ Alternative checkbox clicked');
+      setTimeout(() => {
+        const isChecked = e.target.checked;
+        console.log(`📋 Alternative after click - state: ${isChecked}`);
+        this.updateSubmitButton(isChecked, submitButton, helpText);
+      }, 10);
+    });
+  }
+  
+  /**
+   * 🎛️ 送信ボタンの状態更新
+   * @param {boolean} enabled - 有効化状態
+   * @param {HTMLElement} button - 送信ボタン要素
+   * @param {HTMLElement} helpText - ヘルプテキスト要素
+   */
+  updateSubmitButton(enabled, button, helpText) {
+    console.log(`🎛️ Updating submit button: ${enabled ? 'ENABLED' : 'DISABLED'}`);
+    
+    if (enabled) {
+      button.disabled = false;
+      button.classList.remove('btn-disabled');
+      button.setAttribute('aria-describedby', '');
+      button.style.opacity = '1';
+      button.style.pointerEvents = 'auto';
+      if (helpText) {
+        helpText.textContent = '✓ 送信準備完了';
+        helpText.style.color = '#00A3FF';
+      }
+      console.log('✅ Button enabled');
+    } else {
+      button.disabled = true;
+      button.classList.add('btn-disabled');
+      button.setAttribute('aria-describedby', 'privacy-help');
+      button.style.opacity = '0.4';
+      button.style.pointerEvents = 'none';
+      if (helpText) {
+        helpText.textContent = '※プライバシーポリシーに同意いただくと送信ボタンが有効になります';
+        helpText.style.color = 'rgba(255, 255, 255, 0.7)';
+      }
+      console.log('🚫 Button disabled');
+    }
+  }
+  
+  /**
+   * 🔊 アクセシビリティ：スクリーンリーダー用音声告知
+   * @param {string} message - 告知メッセージ
+   */
+  announceToScreenReader(message) {
+    const announcement = document.createElement('div');
+    announcement.setAttribute('aria-live', 'assertive');
+    announcement.setAttribute('aria-atomic', 'true');
+    announcement.style.position = 'absolute';
+    announcement.style.left = '-10000px';
+    announcement.style.width = '1px';
+    announcement.style.height = '1px';
+    announcement.style.overflow = 'hidden';
+    announcement.textContent = message;
+    
+    document.body.appendChild(announcement);
+    
+    // 短時間後に削除
+    setTimeout(() => {
+      document.body.removeChild(announcement);
+    }, 1000);
   }
 }
 
@@ -1075,10 +1204,61 @@ class AccessibilityEnhancer {
 document.addEventListener('DOMContentLoaded', () => {
   console.log('DOM Content Loaded - Starting initialization');
   
+  // 🚨 CRITICAL: シンプルなテスト版を先に実行
+  setTimeout(() => {
+    console.log('🧪 Running simple checkbox test...');
+    const testCheckbox = document.querySelector('#privacy');
+    const testButton = document.querySelector('.btn-submit');
+    
+    console.log('🧪 Test elements:', {
+      checkbox: !!testCheckbox,
+      button: !!testButton,
+      checkboxId: testCheckbox ? testCheckbox.id : 'NOT_FOUND',
+      buttonClass: testButton ? testButton.className : 'NOT_FOUND'
+    });
+    
+    if (testCheckbox && testButton) {
+      console.log('✅ Both elements found, setting up simple listener');
+      
+      // シンプルなイベントリスナー
+      testCheckbox.addEventListener('change', function() {
+        const isChecked = this.checked;
+        console.log(`🧪 Simple test - checkbox changed: ${isChecked}`);
+        
+        if (isChecked) {
+          testButton.disabled = false;
+          testButton.style.opacity = '1';
+          testButton.style.background = 'linear-gradient(135deg, #00A3FF 0%, #0085CC 100%)';
+          console.log('🧪 Button enabled');
+        } else {
+          testButton.disabled = true;
+          testButton.style.opacity = '0.4';
+          testButton.style.background = 'linear-gradient(135deg, #4a5568 0%, #718096 100%)';
+          console.log('🧪 Button disabled');
+        }
+      });
+      
+      // 初期状態設定
+      testButton.disabled = true;
+      testButton.style.opacity = '0.4';
+      testButton.style.background = 'linear-gradient(135deg, #4a5568 0%, #718096 100%)';
+      console.log('🧪 Initial state set - button disabled');
+      
+    } else {
+      console.error('❌ Test elements not found!');
+    }
+  }, 200);
+  
   // Initialize all components
   new Navigation();
   new AnimationObserver();
-  new ContactForm();
+  
+  // Contact Form を少し遅らせて初期化（DOM要素確実化のため）
+  setTimeout(() => {
+    console.log('🔧 Initializing ContactForm...');
+    new ContactForm();
+  }, 300);
+  
   new ParallaxEffect();
   new LoadingAnimation(); // セキュリティ向上後のロードアニメーション
   new ScrollProgress();
@@ -1179,14 +1359,4 @@ if ('serviceWorker' in navigator) {
   });
 }
 
-// Export for module usage
-export {
-  Navigation,
-  AnimationObserver,
-  ContactForm,
-  ParallaxEffect,
-  LoadingAnimation,
-  ScrollProgress,
-  PerformanceMonitor,
-  AccessibilityEnhancer
-};
+// Classes are now available in global scope for immediate use
