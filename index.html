@@ -708,72 +708,28 @@
                     <h3>ご相談・お見積もり無料</h3>
                     <p>防火管理でお困りのことがございましたら、お気軽にお問い合わせください。元消防士の専門スタッフが丁寧にご対応いたします。</p>
                     
-                    <div class="security-notice">
-                        🔒 <strong>ウルトラセキュア送信</strong><br>
-                        個人情報はサーバー上に保存されず、直接メール送信されます。最高レベルのプライバシー保護を実現しています。
+                    <div class="email-contact">
+                        <h4>📧 メールでお問い合わせ</h4>
+                        
+                        <!-- テンプレート付きメールリンク -->
+                        <a href="mailto:info@refire.co.jp?subject=RE FIRE 防火管理代行サービスについてのお問い合わせ&body=お世話になっております。%0D%0A防火管理代行サービスについてお問い合わせいたします。%0D%0A%0D%0A会社名：%0D%0A%0D%0A担当者名：%0D%0A%0D%0A連絡先（電話番号）：%0D%0A%0D%0Aお問い合わせ内容：%0D%0A%0D%0A%0D%0A上記についてご記入の上、送信してください。%0D%0Aよろしくお願いいたします。" class="email-button">
+                            📨 テンプレート付きでメール送信
+                        </a>
+                        
+                        <!-- シンプルなメールリンク -->
+                        <a href="mailto:info@refire.co.jp" class="email-button-simple">
+                            info@refire.co.jp
+                        </a>
+                        
+                        <p class="email-note">上記リンクをクリックするとメーラーが起動します<br>テンプレート付きリンクは自動で件名・本文が入力されます</p>
+                        
+                        <div class="manual-contact">
+                            <p><strong>メーラーが起動しない場合：</strong></p>
+                            <p>メールアドレス: <span class="copy-text" onclick="copyToClipboard('info@refire.co.jp')">info@refire.co.jp</span> （クリックでコピー）</p>
+                            <p>件名: RE FIRE 防火管理代行サービスについてのお問い合わせ</p>
+                        </div>
                     </div>
                 </div>
-                
-                <form class="contact-form" id="contact-form" name="contact"
-                      aria-labelledby="contact-title"
-                      action="https://formsubmit.co/info@refire.co.jp"
-                      method="POST" accept-charset="UTF-8">
-                    
-                    <!-- FormSubmit 用の隠し項目（必要最小限） -->
-                    <input type="hidden" name="_subject" value="【RE FIRE】お問い合わせ">
-                    <input type="hidden" name="_template" value="table">
-                    <input type="hidden" name="_captcha" value="false">
-                    <!-- 送信後の遷移先（任意）。未指定なら FormSubmit の完了画面 -->
-                    <!-- <input type="hidden" name="_next" value="https://shintar00000.github.io/refire.v2/"> -->
-                    
-                    <!-- Honeypot field for enhanced spam protection -->
-                    <div style="display: none;">
-                        <label for="bot-field">このフィールドは入力しないでください：</label>
-                        <input type="text" name="bot-field" id="bot-field" tabindex="-1" autocomplete="off">
-                    </div>
-                    
-                    <div class="form-group">
-                        <label for="company">会社名 <span class="required" aria-label="必須項目">*</span></label>
-                        <input type="text" id="company" name="company" required placeholder="株式会社○○○" maxlength="100" autocomplete="organization" aria-describedby="company-help" spellcheck="false" data-lpignore="true">
-                    </div>
-                    
-                    <div class="form-group">
-                        <label for="contact">お名前または連絡先 <span class="required">*</span></label>
-                        <input type="text" id="contact" name="contact" required placeholder="山田太郎 または 03-1234-5678" maxlength="100" autocomplete="name" aria-describedby="contact-help" spellcheck="false" data-lpignore="true">
-                    </div>
-                    
-                    <div class="form-group">
-                        <label for="building-type">建物種別</label>
-                        <select id="building-type" name="building-type" data-lpignore="true">
-                            <option value="">選択してください（任意）</option>
-                            <option value="office">オフィスビル</option>
-                            <option value="hotel">ホテル・旅館</option>
-                            <option value="hospital">病院・医療施設</option>
-                            <option value="retail">店舗・商業施設</option>
-                            <option value="factory">工場・製造業</option>
-                            <option value="other">その他</option>
-                        </select>
-                    </div>
-                    
-                    <div class="form-group">
-                        <label for="message">ご要望・ご質問</label>
-                        <textarea id="message" name="message" rows="3" placeholder="現在の状況やご要望などをお聞かせください（任意）" maxlength="500" autocomplete="off" spellcheck="false" data-lpignore="true"></textarea>
-                    </div>
-                    
-                    <div class="form-group">
-                        <label class="checkbox-label">
-                            <input type="checkbox" id="privacy" name="privacy" required>
-                            <a href="./privacy-policy.html" class="privacy-link" target="_blank" rel="noopener noreferrer">プライバシーポリシー</a>に同意します
-                        </label>
-                    </div>
-                    
-                    <button type="submit" class="btn-primary btn-submit" disabled aria-describedby="privacy-help">
-                        送信する
-                    </button>
-                    <div id="privacy-help" class="form-help" aria-live="polite">
-                        ※プライバシーポリシーに同意いただくと送信ボタンが有効になります
-                    </div>
-                </form>
             </div>
         </div>
     </section>

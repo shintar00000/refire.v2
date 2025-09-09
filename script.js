@@ -970,3 +970,103 @@ if ('serviceWorker' in navigator) {
 }
 
 // Classes are now available in global scope for immediate use
+
+// Copy to clipboard function
+function copyToClipboard(text) {
+  if (navigator.clipboard && window.isSecureContext) {
+    // Use modern clipboard API
+    navigator.clipboard.writeText(text).then(() => {
+      showCopyNotification('コピーしました: ' + text);
+    }).catch(err => {
+      console.error('Clipboard copy failed:', err);
+      fallbackCopyTextToClipboard(text);
+    });
+  } else {
+    // Fallback for older browsers or non-secure contexts
+    fallbackCopyTextToClipboard(text);
+  }
+}
+
+function fallbackCopyTextToClipboard(text) {
+  const textArea = document.createElement("textarea");
+  textArea.value = text;
+  textArea.style.position = "fixed";
+  textArea.style.left = "-999999px";
+  textArea.style.top = "-999999px";
+  document.body.appendChild(textArea);
+  textArea.focus();
+  textArea.select();
+  
+  try {
+    const successful = document.execCommand('copy');
+    if (successful) {
+      showCopyNotification('コピーしました: ' + text);
+    } else {
+      showCopyNotification('コピーに失敗しました');
+    }
+  } catch (err) {
+    console.error('Fallback copy failed:', err);
+    showCopyNotification('コピーに失敗しました');
+  }
+  
+  document.body.removeChild(textArea);
+}
+
+function showCopyNotification(message) {
+  // Create notification element
+  const notification = document.createElement('div');
+  notification.textContent = message;
+  notification.style.cssText = `
+    position: fixed;
+    top: 20px;
+    right: 20px;
+    background: #00A3FF;
+    color: white;
+    padding: 12px 20px;
+    border-radius: 8px;
+    z-index: 10000;
+    box-shadow: 0 4px 12px rgba(0, 0, 0, 0.3);
+    font-size: 14px;
+    font-weight: 500;
+    animation: slideInRight 0.3s ease-out;
+  `;
+  
+  document.body.appendChild(notification);
+  
+  // Remove after 3 seconds
+  setTimeout(() => {
+    notification.style.animation = 'slideOutRight 0.3s ease-in';
+    setTimeout(() => {
+      if (notification.parentNode) {
+        document.body.removeChild(notification);
+      }
+    }, 300);
+  }, 3000);
+}
+
+// Add CSS animations for notifications
+const style = document.createElement('style');
+style.textContent = `
+  @keyframes slideInRight {
+    from {
+      transform: translateX(100%);
+      opacity: 0;
+    }
+    to {
+      transform: translateX(0);
+      opacity: 1;
+    }
+  }
+  
+  @keyframes slideOutRight {
+    from {
+      transform: translateX(0);
+      opacity: 1;
+    }
+    to {
+      transform: translateX(100%);
+      opacity: 0;
+    }
+  }
+`;
+document.head.appendChild(style);
