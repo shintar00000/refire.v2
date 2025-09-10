@@ -888,7 +888,7 @@ class FloatingCTA {
   constructor() {
     this.floatingCTA = $('#floating-cta');
     this.heroSection = $('#home');
-    this.contactSection = $('#contact');
+    this.contactSection = $('#company-info');
     this.isVisible = false;
     this.init();
   }
@@ -919,7 +919,7 @@ class FloatingCTA {
     // ヒーローセクションの底部座標
     const heroBottom = this.heroSection ? this.heroSection.offsetTop + this.heroSection.offsetHeight : 0;
     
-    // お問い合わせセクションの上部座標
+    // 会社情報セクションの上部座標
     const contactTop = this.contactSection ? this.contactSection.offsetTop : document.body.scrollHeight;
     
     // 表示条件：ヒーロー通過後 かつ お問い合わせ到達前

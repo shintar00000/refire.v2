@@ -2078,6 +2078,18 @@ section {
   margin-bottom: var(--spacing-sm);
 }
 
+.footer-email-link {
+  color: var(--electric-blue);
+  text-decoration: none;
+  transition: all var(--transition-fast);
+  font-weight: 500;
+}
+
+.footer-email-link:hover {
+  color: var(--flame-orange);
+  text-decoration: underline;
+}
+
 .footer-links ul {
   list-style: none;
 }
