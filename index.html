@@ -15,7 +15,7 @@
       font-src 'self' https://fonts.gstatic.com; 
       img-src 'self' data: https:; 
       connect-src 'self';
-      form-action 'self' https://formsubmit.co;
+      form-action 'self' https://formspree.io;
       frame-ancestors 'none';
       base-uri 'self';
       object-src 'none';
@@ -695,6 +695,91 @@
         </div>
     </section>
 
+    <!-- Contact Section -->
+    <section id="contact" class="contact" aria-labelledby="contact-title">
+        <div class="container">
+            <div class="section-header">
+                <h2 class="section-title">お問い合わせ</h2>
+                <p class="section-subtitle">まずはお気軽にご相談ください</p>
+            </div>
+            
+            <div class="contact-content">
+                <div class="contact-info">
+                    <h3>ご相談・お見積もり無料</h3>
+                    <p>防火管理でお困りのことがございましたら、お気軽にお問い合わせください。元消防士の専門スタッフが丁寧にご対応いたします。</p>
+                    
+                    <div class="security-notice">
+                        🔒 <strong>ウルトラセキュア送信</strong><br>
+                        個人情報はサーバー上に保存されず、直接メール送信されます。最高レベルのプライバシー保護を実現しています。
+                    </div>
+                </div>
+                
+                <form class="contact-form" id="contact-form" name="contact"
+                      aria-labelledby="contact-title"
+                      action="https://formspree.io/f/xandkqle"
+                      method="POST" accept-charset="UTF-8">
+                    
+                    <!-- Honeypot field for enhanced spam protection -->
+                    <div style="display: none;">
+                        <label for="bot-field">このフィールドは入力しないでください：</label>
+                        <input type="text" name="bot-field" id="bot-field" tabindex="-1" autocomplete="off">
+                    </div>
+                    
+                    <div class="form-group">
+                        <label for="company">会社名 <span class="required" aria-label="必須項目">*</span></label>
+                        <input type="text" id="company" name="company" required placeholder="株式会社○○○" maxlength="100" autocomplete="organization" aria-describedby="company-help" spellcheck="false" data-lpignore="true">
+                    </div>
+                    
+                    <div class="form-group">
+                        <label for="contact">お名前または連絡先 <span class="required">*</span></label>
+                        <input type="text" id="contact" name="contact" required placeholder="山田太郎 または 03-1234-5678" maxlength="100" autocomplete="name" aria-describedby="contact-help" spellcheck="false" data-lpignore="true">
+                    </div>
+                    
+                    <div class="form-group">
+                        <label for="email">メールアドレス <span class="required">*</span></label>
+                        <input type="email" id="email" name="email" required autocomplete="email" maxlength="254" placeholder="example@refire.co.jp">
+                    </div>
+                    
+                    <div class="form-group">
+                        <label for="phone">電話番号（任意）</label>
+                        <input type="tel" id="phone" name="phone" autocomplete="tel" maxlength="20" placeholder="090-1234-5678">
+                    </div>
+                    
+                    <div class="form-group">
+                        <label for="building-type">建物種別</label>
+                        <select id="building-type" name="building-type" data-lpignore="true">
+                            <option value="">選択してください（任意）</option>
+                            <option value="office">オフィスビル</option>
+                            <option value="hotel">ホテル・旅館</option>
+                            <option value="hospital">病院・医療施設</option>
+                            <option value="retail">店舗・商業施設</option>
+                            <option value="factory">工場・製造業</option>
+                            <option value="other">その他</option>
+                        </select>
+                    </div>
+                    
+                    <div class="form-group">
+                        <label for="message">ご要望・ご質問</label>
+                        <textarea id="message" name="message" rows="3" placeholder="現在の状況やご要望などをお聞かせください（任意）" maxlength="500" autocomplete="off" spellcheck="false" data-lpignore="true"></textarea>
+                    </div>
+                    
+                    <div class="form-group">
+                        <label class="checkbox-label">
+                            <input type="checkbox" id="privacy" name="privacy" required>
+                            <a href="./privacy-policy.html" class="privacy-link" target="_blank" rel="noopener noreferrer">プライバシーポリシー</a>に同意します
+                        </label>
+                    </div>
+                    
+                    <button type="submit" class="btn-primary btn-submit" disabled aria-describedby="privacy-help">
+                        送信する
+                    </button>
+                    <div id="privacy-help" class="form-help" aria-live="polite">
+                        ※プライバシーポリシーに同意いただくと送信ボタンが有効になります
+                    </div>
+                </form>
+            </div>
+        </div>
+    </section>
 
     </main>
 
