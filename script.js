@@ -87,7 +87,8 @@ class Navigation {
     this.navMenu = $('#nav-menu');
     this.navHamburger = $('#nav-hamburger');
     this.navLinks = $$('.nav-link');
-    
+    this.logoLinks = $$('a[href="#home"]'); // ロゴリンクも含める
+
     this.init();
   }
   
@@ -143,24 +144,52 @@ class Navigation {
   }
   
   setupSmoothScrolling() {
+    // ナビゲーションリンクのスムーズスクロール
     this.navLinks.forEach(link => {
       link.addEventListener('click', (e) => {
         const href = link.getAttribute('href');
-        
+
         if (href && href.startsWith('#')) {
           e.preventDefault();
-          const targetElement = $(href);
-          
-          if (targetElement) {
-            const headerOffset = 80;
-            const elementPosition = targetElement.getBoundingClientRect().top;
-            const offsetPosition = elementPosition + window.pageYOffset - headerOffset;
-            
+
+          // ホームボタンの場合はページトップに戻る
+          if (href === '#home') {
             window.scrollTo({
-              top: offsetPosition,
+              top: 0,
               behavior: 'smooth'
             });
+          } else {
+            // その他のセクションは通常のスクロール
+            const targetElement = $(href);
+
+            if (targetElement) {
+              const headerOffset = 80;
+              const elementPosition = targetElement.getBoundingClientRect().top;
+              const offsetPosition = elementPosition + window.pageYOffset - headerOffset;
+
+              window.scrollTo({
+                top: offsetPosition,
+                behavior: 'smooth'
+              });
+            }
           }
+        }
+      });
+    });
+
+    // ロゴリンクのスムーズスクロール（ページトップに戻る）
+    this.logoLinks.forEach(logoLink => {
+      logoLink.addEventListener('click', (e) => {
+        const href = logoLink.getAttribute('href');
+
+        if (href && href === '#home') {
+          e.preventDefault();
+
+          // ページの最上部（0px）にスクロール
+          window.scrollTo({
+            top: 0,
+            behavior: 'smooth'
+          });
         }
       });
     });
@@ -888,7 +917,7 @@ class FloatingCTA {
   constructor() {
     this.floatingCTA = $('#floating-cta');
     this.heroSection = $('#home');
-    this.contactSection = $('#company-info');
+    this.contactSection = $('#contact');
     this.isVisible = false;
     this.init();
   }
