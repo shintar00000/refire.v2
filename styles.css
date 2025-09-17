@@ -1210,14 +1210,14 @@ section {
 }
 
 .benefit-item {
-  background: rgba(0, 163, 255, 0.2);
-  color: var(--white);
-  padding: var(--spacing-xs) var(--spacing-sm);
-  border-radius: var(--radius-md);
-  font-weight: 500;
+  background: var(--primary);
+  color: white;
+  padding: 0.5rem 1rem;
+  border-radius: 20px;
+  font-weight: 700;
   font-size: 0.9rem;
-  backdrop-filter: blur(10px);
-  border: 1px solid rgba(0, 163, 255, 0.3);
+  border: 2px solid var(--primary);
+  backdrop-filter: none;
 }
 
 @media (max-width: 768px) {
@@ -2263,6 +2263,119 @@ section {
   margin: 0;
   color: #1e40af;
   font-weight: 600;
+}
+
+/* 上部3カードは非表示（HTMLを後で消すなら残してOK） */
+.home-feature-cards,.usp-cards,.top-features{ display:none !important; }
+
+/* ── REASONS を上部カードの見た目に ── */
+.reasons-section{ background:#fff; }
+.reasons-grid{
+  display:grid; grid-template-columns:repeat(3,minmax(0,1fr)); gap:24px;
+}
+.reasons-card{
+  background:#fff; border:1px solid #e9eef5; border-radius:24px;
+  padding:32px 24px; text-align:center;
+  box-shadow:0 8px 24px rgba(0,0,0,.06);
+}
+.reasons-icon{
+  width:72px; height:72px; margin:0 auto 8px;
+  display:grid; place-items:center;
+  border-radius:20px; background:#f3f8ff; border:1px solid #dfeaff;
+  font-size:28px;
+}
+.reasons-card h3{ color:#111; font-size:1.25rem; margin:12px 0 6px; }
+.reasons-card p{ color:#555; line-height:1.7; }
+
+/* スマホ縦で1列 */
+@media (max-width: 960px){
+  .reasons-grid{ grid-template-columns:1fr; }
+}
+
+/* === FINAL OVERRIDES (White theme & readability) === */
+.navbar{background:#fff !important;color:#111 !important;box-shadow:0 1px 0 rgba(0,0,0,.06);}
+.nav-link{color:#111 !important;}
+.nav-link:hover{color:#0B5FFF !important;}
+.logo{filter:none !important;}
+
+.hero{background:#fff !important;color:#111 !important;}
+.hero::before{display:none !important;}
+.hero-title,.hero-subtitle,.hero-description{color:#111 !important;text-shadow:none !important;}
+.hero-cta a{display:inline-flex;align-items:center;justify-content:center;line-height:1;}
+
+.mini-cta-section{background:#fff !important;border:1px solid #eee !important;}
+.mini-cta-content h4,.mini-cta-content p{color:#111 !important;}
+.btn-secondary{background:#fff !important;color:#0B5FFF !important;border:1px solid #0B5FFF !important;}
+
+.usp{display:none !important;}              /* ←上部3カードを消す */
+.authority-bar{display:none !important;}   /* ←Authorityバーも消す */
+
+.advantage-grid{grid-template-columns:repeat(auto-fit,minmax(280px,1fr));gap:24px;}
+/* 下部「🏆 RE FIREが選ばれる理由」を上部カード風に */
+.advantage-item{
+  background:#fff !important;border:1px solid #e9eef5 !important;border-radius:24px;
+  text-align:center;box-shadow:0 8px 24px rgba(0,0,0,.06) !important;color:#111 !important;padding:24px;
+}
+.advantage-icon{
+  width:72px;height:72px;margin:0 auto 8px;display:grid;place-items:center;border-radius:20px;
+  background:#f3f8ff;border:1px solid #dfeaff;font-size:28px;
+}
+
+/* セクション全般の可読性 */
+.section-title,.section-subtitle,.container,.content,.card p{color:#111 !important;}
+.common-violations,.violation-list li{color:#111 !important;}
+.risk-note{color:#666 !important;}
+.contact{background:#fff !important;color:#111 !important;}
+.contact .section-title{color:#111 !important;}
+.contact .contact-info,.contact .contact-form{background:#fff !important;border:1px solid #eaeaea !important;}
+.form-group label{color:#111 !important;}
+.form-group input,.form-group select,.form-group textarea{
+  background:#fff !important;color:#111 !important;border:1px solid #ccc !important;
+}
+.form-group input::placeholder,.form-group textarea::placeholder{color:#888 !important;}
+
+/* コスト vs リスク表の"安っぽさ"改善 */
+.comparison-table table{border-collapse:separate;border-spacing:0;width:100%;background:#fff;}
+.comparison-table th,.comparison-table td{border:1px solid #e9eef5;padding:12px;}
+.comparison-table tr:nth-child(even){background:#fafbff;}
+.comparison-table .highlight-column{background:#f3f8ff;font-weight:700;}
+
+/* Email contact info styling */
+.email-contact-info {
+  background: #f8fafc !important;
+  border: 1px solid #eaeaea !important;
+  border-radius: 8px;
+  padding: 1.5rem;
+  margin-top: 2rem;
+  text-align: center;
+}
+
+.email-contact-info h3 {
+  color: #111 !important;
+  margin-bottom: 0.5rem;
+}
+
+.email-contact-info p {
+  color: #111 !important;
+  margin: 0.5rem 0;
+}
+
+.email-contact-info a {
+  color: var(--primary) !important;
+  font-weight: 600;
+}
+
+/* フッター文字を全て白色に */
+.footer * {
+  color: white !important;
+}
+
+.footer a {
+  color: white !important;
+}
+
+.footer a:hover {
+  color: rgba(255, 255, 255, 0.8) !important;
 }
 
 /* アクセシビリティ配慮 */
