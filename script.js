@@ -102,16 +102,14 @@ class Navigation {
   setupScrollEffect() {
     const handleScroll = throttle(() => {
       const scrollY = window.scrollY;
-      
-      if (scrollY > 50) {
-        this.navbar.style.background = 'rgba(0, 0, 0, 0.98)';
-        this.navbar.style.boxShadow = '0 2px 20px rgba(0, 0, 0, 0.3)';
-      } else {
-        this.navbar.style.background = 'rgba(0, 0, 0, 0.95)';
-        this.navbar.style.boxShadow = 'none';
-      }
+
+      // どのスクロール位置でも白背景を維持
+      this.navbar.style.background = '#ffffff';
+      this.navbar.style.boxShadow = (scrollY > 50)
+        ? '0 2px 12px rgba(0,0,0,.06)'
+        : '0 1px 0 rgba(0,0,0,.06)';
     }, 10);
-    
+
     window.addEventListener('scroll', handleScroll);
   }
   
@@ -621,7 +619,7 @@ class ContactForm {
       button.style.pointerEvents = 'none';
       if (helpText) {
         helpText.textContent = '※プライバシーポリシーに同意いただくと送信ボタンが有効になります';
-        helpText.style.color = 'rgba(255, 255, 255, 0.7)';
+        helpText.style.color = '#666';
       }
       console.log('🚫 Button disabled');
     }
@@ -873,7 +871,7 @@ document.addEventListener('DOMContentLoaded', () => {
         } else {
           testButton.disabled = true;
           testButton.style.opacity = '0.4';
-          testButton.style.background = 'linear-gradient(135deg, #4a5568 0%, #718096 100%)';
+          testButton.style.background = '#ccc';
           console.log('🧪 Button disabled');
         }
       });
@@ -881,7 +879,7 @@ document.addEventListener('DOMContentLoaded', () => {
       // 初期状態設定
       testButton.disabled = true;
       testButton.style.opacity = '0.4';
-      testButton.style.background = 'linear-gradient(135deg, #4a5568 0%, #718096 100%)';
+      testButton.style.background = '#ccc';
       console.log('🧪 Initial state set - button disabled');
       
     } else {

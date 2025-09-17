@@ -1,13 +1,20 @@
 /* CSS Custom Properties */
 :root {
-  /* Brand Colors */
-  --brand-black: #000000;
-  --electric-blue: #00A3FF;
-  --flame-orange: #FF4E00;
-  --white: #FFFFFF;
+  /* 3系統色制限 - 可読性優先 */
+  --bg: #ffffff;
+  --text: #111111;
+  --muted: #555555;
+  --primary: #0B5FFF;
+  --accent: #FF6A3D;
+
+  /* 従来の色名も互換性のため残す */
+  --brand-black: #111111;
+  --electric-blue: #0B5FFF;
+  --flame-orange: #FF6A3D;
+  --white: #ffffff;
   --light-gray: #F5F5F5;
-  --dark-gray: #333333;
-  --medium-gray: #666666;
+  --dark-gray: #111111;
+  --medium-gray: #555555;
   
   /* Typography */
   --font-primary: 'Noto Sans JP', sans-serif;
@@ -54,8 +61,8 @@ html {
 body {
   font-family: var(--font-primary);
   line-height: 1.6;
-  color: var(--dark-gray);
-  background-color: var(--white);
+  color: var(--text);
+  background-color: var(--bg);
   overflow-x: hidden;
 }
 
@@ -364,29 +371,35 @@ body {
 }
 
 
-/* Buttons */
+/* Buttons - 統一スタイル */
+.btn,
 .btn-primary,
 .btn-secondary {
   display: inline-block;
-  padding: var(--spacing-sm) var(--spacing-md);
-  border-radius: var(--radius-md);
+  min-height: 44px;
+  padding: 0 16px;
+  border-radius: 12px;
   text-decoration: none;
   font-weight: 600;
+  font-size: 1rem;
   transition: all var(--transition-fast);
   cursor: pointer;
   border: none;
   font-family: inherit;
-  font-size: 1rem;
+  line-height: 44px;
+  text-align: center;
+  box-sizing: border-box;
 }
 
 .btn-primary {
-  background: linear-gradient(135deg, var(--electric-blue) 0%, #0085cc 100%);
+  background: var(--primary);
   color: var(--white);
   box-shadow: var(--shadow-md);
 }
 
 .btn-primary:hover {
-  transform: translateY(-3px);
+  background: #094AD9;
+  transform: translateY(-2px);
   box-shadow: var(--shadow-lg);
 }
 
@@ -398,12 +411,46 @@ body {
 
 .btn-secondary:hover {
   background: var(--white);
-  color: var(--brand-black);
-  transform: translateY(-3px);
+  color: var(--text);
+  transform: translateY(-2px);
 }
 
 .btn-submit {
   width: 100%;
+}
+
+/* Target Audience */
+.target-audience {
+  background: var(--bg);
+  padding: var(--spacing-md) 0;
+  border-bottom: 1px solid rgba(17, 17, 17, 0.1);
+}
+
+.target-label {
+  text-align: center;
+  color: var(--muted);
+  font-size: 0.9rem;
+  margin-bottom: var(--spacing-sm);
+  font-weight: 500;
+}
+
+.target-chips {
+  display: flex;
+  flex-wrap: wrap;
+  justify-content: center;
+  gap: 0.5rem;
+  max-width: 800px;
+  margin: 0 auto;
+}
+
+.target-chip {
+  background: var(--primary);
+  color: var(--white);
+  padding: 0.25rem 0.75rem;
+  border-radius: 20px;
+  font-size: 0.85rem;
+  font-weight: 500;
+  white-space: nowrap;
 }
 
 /* Sections */
@@ -949,6 +996,9 @@ section {
   border: 1px solid rgba(255, 255, 255, 0.2);
   position: relative;
   transition: all var(--transition-normal);
+  display: flex;
+  flex-direction: column;
+  min-height: 100%;
 }
 
 .pricing-card:hover {
@@ -1026,19 +1076,89 @@ section {
   left: 0;
 }
 
+.pricing-card .price-includes {
+  flex: 1;
+  margin-bottom: var(--spacing-md);
+}
+
+.pricing-card .price-includes li {
+  position: relative;
+  padding-left: 0;
+}
+
+.pricing-card .check {
+  color: #00FF88;
+  font-weight: bold;
+  margin-right: 0.5rem;
+  font-size: 1rem;
+}
+
+.pricing-note {
+  background: rgba(255, 255, 255, 0.05);
+  padding: var(--spacing-sm);
+  border-radius: var(--radius-md);
+  margin-top: var(--spacing-md);
+  text-align: center;
+  border: 1px solid rgba(255, 255, 255, 0.1);
+}
+
+.pricing-note p {
+  color: var(--white);
+  margin: 0.25rem 0;
+  font-size: 0.9rem;
+}
+
+.pricing-note p:first-child {
+  color: var(--accent);
+}
+
+/* Risk Warning */
+.common-violations {
+  background: rgba(255, 106, 61, 0.1);
+  padding: var(--spacing-sm);
+  border-radius: var(--radius-md);
+  margin-bottom: var(--spacing-md);
+  border-left: 4px solid var(--accent);
+}
+
+.common-violations h4 {
+  color: var(--accent);
+  margin-bottom: var(--spacing-sm);
+  font-size: 1.1rem;
+}
+
+.violation-list {
+  list-style: none;
+  padding: 0;
+  margin: 0;
+}
+
+.violation-list li {
+  color: var(--white);
+  padding: 0.25rem 0;
+  font-size: 0.9rem;
+}
+
+.risk-details small {
+  color: rgba(255, 255, 255, 0.7);
+  font-size: 0.8rem;
+  display: block;
+  margin-top: 0.25rem;
+}
+
 .pricing-card .btn-primary,
 .pricing-card .btn-secondary {
   margin-top: auto;
 }
 
 .pricing-card.apartment {
-  background: linear-gradient(145deg, rgba(0, 163, 255, 0.15) 0%, rgba(0, 133, 204, 0.15) 100%);
-  border: 2px solid rgba(0, 163, 255, 0.3);
+  background: rgba(11, 95, 255, 0.1);
+  border: 2px solid rgba(11, 95, 255, 0.3);
 }
 
 .pricing-card.commercial {
-  background: linear-gradient(145deg, rgba(255, 78, 0, 0.15) 0%, rgba(204, 62, 0, 0.15) 100%);
-  border: 2px solid rgba(255, 78, 0, 0.3);
+  background: rgba(255, 106, 61, 0.1);
+  border: 2px solid rgba(255, 106, 61, 0.3);
 }
 
 /* Multiple Properties Notice */
@@ -1903,14 +2023,14 @@ section {
   align-items: center;
   gap: 0.5rem;
   padding: 1rem 1.5rem;
-  background: linear-gradient(135deg, var(--brand-blue) 0%, #0066cc 100%);
+  background: var(--primary);
   color: white;
-  border: none;
+  border: 2px solid rgba(0, 0, 0, 0.08);
   border-radius: 50px;
   cursor: pointer;
   font-size: 1rem;
   font-weight: 600;
-  box-shadow: 0 8px 32px rgba(0, 163, 255, 0.3);
+  box-shadow: 0 10px 24px rgba(0, 0, 0, 0.18);
   transition: all 0.3s ease;
   position: relative;
   overflow: hidden;
@@ -1918,8 +2038,9 @@ section {
 
 .floating-cta-btn:hover {
   transform: translateY(-3px);
-  box-shadow: 0 12px 40px rgba(0, 163, 255, 0.4);
-  background: linear-gradient(135deg, #0085cc 0%, var(--brand-blue) 100%);
+  box-shadow: 0 15px 32px rgba(0, 0, 0, 0.25);
+  background: #094AD9;
+  border-color: rgba(0, 0, 0, 0.12);
 }
 
 .floating-cta-btn:active {
@@ -2026,6 +2147,122 @@ section {
   .floating-cta-icon {
     font-size: 1.5rem;
   }
+}
+
+/* コスト計算セクションの改善スタイル */
+.cost-calculation {
+  background: #ffffff;
+  border: 1px solid #e1e5e9;
+  border-radius: 12px;
+  padding: 2rem;
+  margin: 2rem 0;
+}
+
+.cost-calculation h4 {
+  color: #1a365d;
+  margin-bottom: 1.5rem;
+  text-align: center;
+  font-weight: 700;
+}
+
+.calculation-box {
+  display: grid;
+  grid-template-columns: 1fr auto 1fr;
+  gap: 1.5rem;
+  align-items: center;
+  margin-bottom: 1.5rem;
+}
+
+@media (max-width: 768px) {
+  .calculation-box {
+    grid-template-columns: 1fr;
+    gap: 1rem;
+  }
+
+  .vs-divider {
+    text-align: center;
+    order: 2;
+  }
+
+  .calculation-item.danger {
+    order: 1;
+  }
+
+  .calculation-item.safe {
+    order: 3;
+  }
+}
+
+.calculation-item {
+  background: #f8fafc;
+  border-radius: 8px;
+  padding: 1.5rem;
+  border: 2px solid transparent;
+}
+
+.calculation-item.danger {
+  border-color: #ff6b6b;
+  background: #fff5f5;
+}
+
+.calculation-item.safe {
+  border-color: #51cf66;
+  background: #f0fff4;
+}
+
+.calculation-item h5 {
+  margin-bottom: 1rem;
+  font-weight: 700;
+  color: #1a365d;
+}
+
+.cost-breakdown p {
+  margin: 0.5rem 0;
+  line-height: 1.6;
+}
+
+.cost-breakdown .total {
+  font-weight: 700;
+  font-size: 1.1rem;
+  color: #1a365d;
+  margin-top: 1rem;
+  padding-top: 0.5rem;
+  border-top: 1px solid #e1e5e9;
+}
+
+.risk-note {
+  color: #666;
+  font-size: 0.85rem;
+  display: block;
+  margin-top: 0.5rem;
+}
+
+.vs-divider {
+  font-weight: 700;
+  color: #1a365d;
+  background: #e1e5e9;
+  border-radius: 50%;
+  width: 40px;
+  height: 40px;
+  display: flex;
+  align-items: center;
+  justify-content: center;
+  font-size: 0.9rem;
+  justify-self: center;
+}
+
+.roi-highlight {
+  background: #f0f9ff;
+  border: 1px solid #0ea5e9;
+  border-radius: 8px;
+  padding: 1.5rem;
+  text-align: center;
+}
+
+.roi-highlight p {
+  margin: 0;
+  color: #1e40af;
+  font-weight: 600;
 }
 
 /* アクセシビリティ配慮 */
@@ -2581,8 +2818,279 @@ button[disabled].btn-submit {
     border: 3px solid var(--brand-black);
     background: var(--white);
   }
-  
+
   .security-note-modal {
     border: 2px solid var(--electric-blue);
   }
 }
+
+/* === Light Theme Flip : sectionsを白基調へ === */
+
+/* Hero を黒→明るいグラデに */
+.hero {
+  background: linear-gradient(180deg, #f8fafc 0%, #ffffff 100%) !important;
+}
+.hero-title,
+.hero-description { text-shadow: none !important; color: var(--text) !important; }
+.hero-subtitle { color: var(--primary) !important; }
+.title-highlight { -webkit-text-fill-color: initial !important; color: var(--primary) !important; }
+
+/* メインサービス全体を白へ */
+.main-service,
+.contact {
+  background: var(--bg) !important;
+  color: var(--text) !important;
+}
+.main-service .section-title,
+.main-service h3,
+.contact .section-title { color: var(--brand-black) !important; }
+
+/* 各ボックスも白系へ（ガラス風や濃色を控えめに） */
+.service-flow-section,
+.pricing-plans-section,
+.pricing-card,
+.competitor-comparison,
+.contact-form,
+.contact-info {
+  background: #ffffff !important;
+  color: var(--text) !important;
+  border: 1px solid #eaeaea !important;
+  backdrop-filter: none !important;
+}
+
+/* 価格表の配色/可読性 */
+.price { color: var(--primary) !important; }
+.pricing-card h3, .pricing-card h4 { color: var(--brand-black) !important; }
+.pricing-card.apartment,
+.pricing-card.commercial { background: #fff !important; border-color:#eaeaea !important; }
+
+/* テーブル（比較表）を白基調に */
+.comparison-table table { background:#fff !important; }
+.comparison-table th { background:#f1f6ff !important; color:#222 !important; }
+.comparison-table td { color:#222 !important; }
+.highlight-column { background:#eaf2ff !important; }
+.highlight-column::after { display:none !important; }
+
+/* ミニCTA・権威バーを白へ */
+.mini-cta-section,
+.authority-bar {
+  background: #f8fafc !important;
+  border: 1px solid #eee !important;
+}
+.authority-bar::before { display: none !important; } /* きらめきアニメ除去 */
+.authority-item {
+  background:#fff !important; border:1px solid #eee !important;
+}
+.authority-content h3 { color:#111 !important; }
+.authority-content p { color:#555 !important; }
+
+/* ステップカード/番号まわりのコントラスト調整 */
+.flow-step { background:#fff !important; border:1px solid #eee !important; }
+.flow-step:not(:last-child)::after { background:#fff !important; } /* ▼の下地が黒→白に */
+.step-number { border:none !important; }
+
+/* リスク警告ブロックはトーンを弱める（詐欺感対策） */
+.risk-warning {
+  background:#fff !important; border:1px solid #ffd7c7 !important; animation:none !important; box-shadow:none !important;
+}
+.risk-details h4, .common-violations h4 { color:#c44 !important; }
+.common-violations { background:#fff5f1 !important; }
+
+/* セカンダリボタンをブルーのアウトラインに（白背景でも視認） */
+.btn-secondary {
+  color: var(--primary) !important;
+  border: 2px solid var(--primary) !important;
+  background: transparent !important;
+}
+.btn-secondary:hover { background: var(--primary) !important; color:#fff !important; }
+
+/* 浮遊CTAの視認性アップ（白背景でも埋もれないよう縁取り強化） */
+.floating-cta-btn {
+  border: 2px solid rgba(0,0,0,.08) !important;
+  box-shadow: 0 10px 24px rgba(0,0,0,.15) !important;
+}
+
+/* "AI感"の軽減：過剰アニメとグローを抑制 */
+.mini-cta-section::before,
+.service-flow-section::before,
+.multiple-properties-notice::before,
+.highlight-column::after { display:none !important; animation:none !important; }
+.authority-icon, .advantage-icon, .usp-img { filter:none !important; }
+
+/* 高さ揃え：カード本文→ボタンを底に押し下げる */
+.pricing-card { display:flex; flex-direction:column; }
+.pricing-card .price-includes { flex:1; }
+.pricing-card a[class*="btn"] { margin-top:auto; }
+
+/* Real Work Photo - AI感軽減のための実写追加 */
+.real-work-photo {
+  background: var(--bg);
+  padding: var(--spacing-md) 0;
+  border-bottom: 1px solid rgba(17, 17, 17, 0.1);
+}
+
+.work-photo-container {
+  text-align: center;
+  margin: 0;
+}
+
+.work-photo {
+  max-width: 100%;
+  height: auto;
+  max-height: 300px;
+  border-radius: var(--radius-md);
+  box-shadow: var(--shadow-md);
+}
+
+.work-photo-container figcaption {
+  margin-top: var(--spacing-sm);
+  color: var(--muted);
+  font-size: 0.9rem;
+  font-style: italic;
+}
+
+/* === Light base === */
+:root{
+  --bg:#ffffff;
+  --text:#111111;
+  --muted:#555555;
+  --primary:#0B5FFF;   /* ブルー */
+  --accent:#FF6A3D;    /* アクセント(控えめに) */
+}
+
+html, body { background: var(--bg) !important; color: var(--text) !important; }
+
+/* === Header / Nav を白に === */
+.navbar, header, .site-header {
+  background: #fff !important;
+  color: var(--text) !important;
+  border-bottom: 1px solid #eaeaea !important;
+  box-shadow: 0 2px 8px rgba(0,0,0,.04) !important;
+}
+.navbar a, .site-header a {
+  color: #111 !important;
+  font-weight: 600;
+}
+.navbar a:hover, .site-header a:hover { color: var(--primary) !important; }
+.navbar .cta, .site-header .cta {
+  background: var(--primary) !important; color:#fff !important;
+  border-radius: 10px; padding: 10px 14px; font-weight:700;
+}
+
+/* === Hero を白基調へ／文字を濃く・影を消す === */
+.hero {
+  background: #fff !important;
+  color: var(--text) !important;
+}
+.hero h1, .hero .hero-title { color:#111 !important; text-shadow:none !important; }
+.hero p, .hero .hero-subtitle, .hero .hero-description { color:#333 !important; text-shadow:none !important; }
+
+/* === セクションは明るく・可読性を優先 === */
+.section, .main-service, .service-flow-section, .pricing-plans-section,
+.competitor-comparison, .contact, .mini-cta-section, .authority-bar {
+  background:#fff !important; color:var(--text) !important;
+  border: 1px solid #efefef !important;
+  box-shadow:none !important; backdrop-filter:none !important;
+}
+.section-title, h2, h3 { color:#111 !important; }
+
+/* === テーブル・カードの可読性 === */
+.pricing-card, .compare-card, .contact-form, .contact-info {
+  background:#fff !important; color:#111 !important; border:1px solid #eaeaea !important;
+}
+.pricing-card { display:flex; flex-direction:column; }
+.pricing-card .price-includes { flex:1; }
+.pricing-card a[class*="btn"] { margin-top:auto; }
+
+/* === ボタンの統一 === */
+.btn-primary{
+  background:var(--primary) !important; color:#fff !important; border:none !important;
+  min-height:44px; padding:12px 18px; border-radius:12px; font-weight:700;
+}
+.btn-secondary{
+  background:transparent !important; color:var(--primary) !important;
+  border:2px solid var(--primary) !important; min-height:44px; border-radius:12px;
+}
+.btn-secondary:hover{ background:var(--primary) !important; color:#fff !important; }
+
+/* === 右下「無料診断」固定ボタンの視認性 === */
+.floating-cta-btn{
+  background: var(--primary) !important; color:#fff !important;
+  border: 2px solid rgba(0,0,0,.08) !important;
+  box-shadow: 0 10px 24px rgba(0,0,0,.15) !important;
+}
+
+/* === 読みにくい薄色テキストを濃く === */
+.subtle, .note, .caption { color:#555 !important; }
+
+/* === 過度な発光・影・アニメを抑制（"AIっぽさ"軽減） === */
+[class*="glow"], [class*="shine"], .sparkle, .pulse { animation:none !important; filter:none !important; text-shadow:none !important; }
+
+/* === Header: white theme === */
+.navbar{
+  background:#fff !important;
+  box-shadow:0 1px 0 rgba(0,0,0,.06);
+}
+.nav-logo .logo{ filter:none; }
+.nav-link{ color:var(--dark-gray) !important; }
+.nav-link:hover{ color:var(--electric-blue) !important; }
+.cta-link{ background:var(--electric-blue); color:#fff !important; }
+
+/* === Hero section: remove dark overlay & shadows === */
+.hero{ background:#fff !important; }
+.hero::before{ display:none !important; }            /* 残っていた黒い被せを無効化 */
+
+.hero-content{ color:var(--dark-gray) !important; }
+.hero-title{ color:var(--brand-black) !important; text-shadow:none !important; }
+.hero-subtitle{ color:var(--electric-blue) !important; text-shadow:none !important; }
+.hero-description{ color:var(--medium-gray) !important; text-shadow:none !important; }
+
+/* 白背景で読みにくい箇所の是正 */
+.form-help{ color:var(--medium-gray) !important; }
+.section-title, .section-subtitle{ text-shadow:none !important; }
+.btn-disabled, .btn-submit[disabled]{
+  opacity:.5; color:#fff;
+}
+
+/* === Buttons: 中央揃え＆高さ統一 === */
+.btn, .btn-primary, .btn-secondary{
+  display:inline-flex !important;
+  align-items:center; justify-content:center;
+  height:48px; line-height:1.2; padding:0 18px;
+  font-weight:700;
+}
+.btn-secondary{
+  color:var(--primary) !important; border:2px solid var(--primary) !important;
+  background:#fff !important;
+}
+.btn-secondary:hover{ background:var(--primary) !important; color:#fff !important; }
+
+/* === ミニCTA/見出しの読みやすさ（白地×濃文字） === */
+.mini-cta-section{ background:#f8fafc !important; border:1px solid #e9eef5 !important; }
+.mini-cta-section h3,.mini-cta-section p{ color:#111 !important; text-shadow:none !important; }
+
+/* === 「コスト vs リスク」デザインをフラット&上質に === */
+.cost-calculation{ background:#fff !important; border:1px solid #eaeaea !important; }
+.calculation-box{ gap:24px; }
+.calculation-item{ background:#fff !important; border:1px solid #eaeaea !important; backdrop-filter:none !important; }
+.calculation-item.danger{ background:#fff7f5 !important; border-color:#ffd7cc !important; }
+.calculation-item.safe  { background:#f3f8ff !important; border-color:#cfe3ff !important; }
+.vs-divider{
+  width:48px; height:48px; border-radius:50%;
+  background:#fff; border:1px solid #ddd; color:#888;
+}
+/* 注記（※）と脚注の視認性 */
+.risk-note{ color:#666 !important; font-style:normal !important; }
+
+/* === 「よくある不備例」：コントラスト強化 === */
+.common-violations, .violations-list{
+  background:#fff4f2 !important; border:1px solid #ffd7cc !important; color:#222 !important;
+}
+.common-violations h4{ color:#b33 !important; }
+.violations-list li{ color:#222 !important; }
+
+/* === カード/コンテナ内テキストの薄色を救済（全体安全網） === */
+.section, .card, .contact-form, .contact-info, .authority-item, .advantage-item{
+  color:#111 !important;
+}
+.caption,.note,.subtle{ color:#555 !important; }
