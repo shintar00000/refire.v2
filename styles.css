@@ -112,7 +112,7 @@ body {
 }
 
 .nav-logo .logo {
-  height: 40px;
+  height: 60px;
   width: auto;
   object-fit: contain;
 }
@@ -315,6 +315,20 @@ body {
   animation: fadeInUp 1s ease-out;
 }
 
+.hero-kicker {
+  font-size: clamp(1rem, 2.5vw, 1.4rem);
+  font-weight: 400;
+  margin-bottom: var(--spacing-xs);
+  color: var(--electric-blue);
+  text-shadow: 0 2px 8px rgba(0, 0, 0, 0.7);
+}
+
+.hero-kicker strong {
+  font-weight: 700;
+  color: var(--electric-blue);
+  text-shadow: 0 1px 2px rgba(0, 0, 0, 0.9);
+}
+
 .hero-title {
   font-size: clamp(1.8rem, 4.5vw, 3rem);
   font-weight: 900;
@@ -434,23 +448,57 @@ body {
   font-weight: 500;
 }
 
-.target-chips {
-  display: flex;
-  flex-wrap: wrap;
-  justify-content: center;
-  gap: 0.5rem;
-  max-width: 800px;
-  margin: 0 auto;
+.target-facilities-grid {
+  display: grid;
+  grid-template-columns: repeat(auto-fit, minmax(250px, 1fr));
+  gap: 2rem;
+  max-width: 900px;
+  margin: 0 auto 2rem;
+}
+
+.facility-item {
+  text-align: center;
+}
+
+.facility-image {
+  width: 100%;
+  max-width: 300px;
+  height: 220px;
+  object-fit: cover;
+  border-radius: 12px;
+  margin-bottom: 1rem;
+  box-shadow: 0 4px 12px rgba(0,0,0,0.1);
+  transition: transform 0.2s ease;
+}
+
+.facility-image:hover {
+  transform: translateY(-2px);
 }
 
 .target-chip {
   background: var(--primary);
   color: var(--white);
-  padding: 0.25rem 0.75rem;
+  padding: 0.5rem 1rem;
   border-radius: 20px;
-  font-size: 0.85rem;
-  font-weight: 500;
+  font-size: 0.9rem;
+  font-weight: 600;
+  display: inline-block;
   white-space: nowrap;
+}
+
+.coverage-area {
+  text-align: center;
+  margin-top: 2rem;
+}
+
+.area-chip {
+  background: #f0f9ff;
+  color: var(--primary);
+  padding: 0.75rem 1.5rem;
+  border-radius: 25px;
+  font-size: 0.9rem;
+  font-weight: 600;
+  border: 1px solid #0ea5e9;
 }
 
 /* Sections */
