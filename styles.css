@@ -2413,6 +2413,56 @@ section {
   font-weight: 600;
 }
 
+/* Phone contact info styling */
+.phone-contact-info {
+  background: #f8fafc !important;
+  border: 1px solid #eaeaea !important;
+  border-radius: 8px;
+  padding: 1.5rem;
+  margin-top: 2rem;
+  text-align: center;
+}
+
+.phone-contact-info h3 {
+  color: #111 !important;
+  margin-bottom: 0.5rem;
+}
+
+.phone-contact-info p {
+  color: #111 !important;
+  margin: 0.5rem 0;
+}
+
+.phone-contact-info a {
+  color: var(--primary) !important;
+  font-weight: 600;
+}
+
+/* Contact phone styling for index.html */
+.contact-phone {
+  background: #f8fafc !important;
+  border: 1px solid #eaeaea !important;
+  border-radius: 8px;
+  padding: 1.5rem;
+  margin-top: 2rem;
+  text-align: center;
+}
+
+.contact-phone h4 {
+  color: #111 !important;
+  margin-bottom: 0.5rem;
+}
+
+.contact-phone p {
+  color: #111 !important;
+  margin: 0.5rem 0;
+}
+
+.contact-phone a {
+  color: var(--primary) !important;
+  font-weight: 600;
+}
+
 /* フッター文字を全て白色に */
 .footer * {
   color: white !important;
@@ -3017,6 +3067,13 @@ button[disabled].btn-submit {
   color: var(--text) !important;
   border: 1px solid #eaeaea !important;
   backdrop-filter: none !important;
+}
+
+/* ホームページのお問い合わせセクション「ご相談・お見積もり無料」のコンテナサイズ調整 */
+.contact .contact-info {
+  padding: 1.5rem !important;
+  max-width: 600px;
+  margin: 0 auto;
 }
 
 /* 価格表の配色/可読性 */
