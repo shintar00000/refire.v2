@@ -3312,3 +3312,42 @@ html, body { background: var(--bg) !important; color: var(--text) !important; }
   color:#111 !important;
 }
 .caption,.note,.subtle{ color:#555 !important; }
+
+/* ==== Mobile: ハンバーガーを必ず見える色に（背景色に追従） ==== */
+.nav-hamburger { color: #111; }
+.navbar .nav-hamburger { color: #111; }
+.nav-hamburger span { background: currentColor !important; }
+
+/* ==== Mobile: メニュー内のリンクはクラス有無にかかわらず白 ==== */
+@media (max-width: 768px){
+  .nav-menu a{
+    display: block;
+    color: #fff !important;
+    padding: var(--spacing-sm) 0;
+    border-bottom: 1px solid rgba(255,255,255,.12);
+  }
+  .nav-menu .cta, .nav-menu .cta-link{
+    display: block;
+    background: var(--electric-blue);
+    color: #fff !important;
+    text-align: center;
+    border-radius: var(--radius-sm);
+    padding: var(--spacing-sm);
+    border: none;
+    margin-top: var(--spacing-sm);
+  }
+}
+
+/* ==== 対応エリア／対象施設のピルを折り返し可能に（崩れ防止） ==== */
+.area-chip, .target-chip{
+  display: inline-block !important;
+  white-space: normal !important;  /* 既存の nowrap を無効化 */
+  line-height: 1.45;
+  max-width: 100%;
+}
+
+/* ==== Hero の高さを実端末に合わせて安全化（黒一色に見える事故を防ぐ） ==== */
+.hero{ min-height: 100svh; height: auto; }
+@supports (min-height: 100dvh){
+  .hero{ min-height: 100dvh; }
+}

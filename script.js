@@ -86,7 +86,7 @@ class Navigation {
     this.navbar = $('.navbar');
     this.navMenu = $('#nav-menu');
     this.navHamburger = $('#nav-hamburger');
-    this.navLinks = $$('.nav-link');
+    this.navLinks = $('#nav-menu a, .nav-link');  // クラス漏れでも閉じられるように
     this.logoLinks = $$('a[href="#home"]'); // ロゴリンクも含める
 
     this.init();

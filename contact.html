@@ -9,22 +9,26 @@
   <link rel="icon" type="image/jpeg" href="./logo/3BD52A16-41AE-4569-9508-0B5A617F9B5C.jpeg">
 </head>
 <body>
-  <!-- 共通ヘッダー -->
-  <header class="site-header">
-    <nav class="navbar">
+  <header>
+    <nav class="navbar" role="navigation" aria-label="メインナビゲーション">
       <div class="nav-container">
         <div class="nav-logo">
           <a href="index.html">
             <img src="./logo/3BD52A16-41AE-4569-9508-0B5A617F9B5C.jpeg" alt="RE FIRE Logo" class="logo">
           </a>
         </div>
-        <div class="nav-menu">
-          <a href="index.html">ホーム</a>
-          <a href="services.html">防火管理代行</a>
-          <a href="pricing.html">料金</a>
-          <a href="services.html#others">サービス一覧</a>
-          <a href="company.html">会社概要</a>
-          <a class="cta active" href="contact.html">お問い合わせ</a>
+
+        <div class="nav-menu" id="nav-menu">
+          <a href="index.html" class="nav-link">ホーム</a>
+          <a href="services.html" class="nav-link">防火管理代行</a>
+          <a href="pricing.html" class="nav-link">料金</a>
+          <a href="services.html#others" class="nav-link">サービス一覧</a>
+          <a href="company.html" class="nav-link">会社概要</a>
+          <a href="contact.html" class="nav-link cta-link">お問い合わせ</a>
+        </div>
+
+        <div class="nav-hamburger" id="nav-hamburger" aria-label="メニュー" role="button" tabindex="0">
+          <span></span><span></span><span></span>
         </div>
       </div>
     </nav>
