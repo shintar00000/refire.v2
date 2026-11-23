@@ -3351,3 +3351,91 @@ html, body { background: var(--bg) !important; color: var(--text) !important; }
 @supports (min-height: 100dvh){
   .hero{ min-height: 100dvh; }
 }
+/* ==========================================================================
+   共通ユーティリティとスクリプト連動のスタイル（2026年11月 リファクタリング）
+   インライン style 属性と、JavaScript から直接書き込んでいた見た目をここに集約
+   ========================================================================== */
+
+.text-center { text-align: center; }
+.mt-2 { margin-top: 2rem; }
+
+.pricing-lead {
+  text-align: center;
+  margin: -0.5rem 0 1rem;
+  font-weight: 700;
+  color: var(--accent);
+}
+
+/* 料金欄などの下に置く、業務範囲の注記 */
+.legal-note {
+  margin-top: 1rem;
+  font-size: 0.9rem;
+  line-height: 1.7;
+}
+
+/* スパム対策のハニーポット。人にもスクリーンリーダーにも見せない */
+.form-honeypot { display: none; }
+
+/* フォームの入力エラー */
+.error-message {
+  color: #FF4E00;
+  font-size: 0.875rem;
+  margin-top: 0.25rem;
+}
+input.is-invalid,
+select.is-invalid,
+textarea.is-invalid { border-color: #FF4E00; }
+
+/* スクロールで表示する要素 */
+.reveal {
+  opacity: 0;
+  transform: translateY(30px);
+  transition: opacity 0.8s ease-out, transform 0.8s ease-out;
+}
+.reveal.is-visible {
+  opacity: 1;
+  transform: translateY(0);
+}
+
+/* 読み進めた割合のバー */
+#scroll-progress {
+  position: fixed;
+  top: 70px;
+  left: 0;
+  width: 0;
+  height: 3px;
+  background: linear-gradient(90deg, #00A3FF, #FF4E00);
+  z-index: 999;
+  transition: width 0.1s ease-out;
+  pointer-events: none;
+}
+
+/* 本文へのスキップリンク。フォーカスされたときだけ表示 */
+.skip-link {
+  position: absolute;
+  top: -100px;
+  left: 6px;
+  background: #00A3FF;
+  color: #fff;
+  padding: 8px;
+  text-decoration: none;
+  z-index: 10000;
+  border-radius: 4px;
+  transition: top 0.3s;
+}
+.skip-link:focus { top: 6px; }
+main:focus { outline: none; }
+
+/* モバイルメニューを開いている間は背面をスクロールさせない */
+body.nav-open { overflow: hidden; }
+
+/* 動きを減らす設定の利用者にはアニメーションを止める */
+@media (prefers-reduced-motion: reduce) {
+  *, *::before, *::after {
+    animation-duration: 0.01ms !important;
+    animation-iteration-count: 1 !important;
+    transition-duration: 0.01ms !important;
+    scroll-behavior: auto !important;
+  }
+  .reveal { opacity: 1; transform: none; }
+}

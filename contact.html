@@ -3,9 +3,11 @@
 <head>
   <meta charset="utf-8" />
   <meta name="viewport" content="width=device-width, initial-scale=1" />
+  <meta http-equiv="Content-Security-Policy" content="default-src 'self'; script-src 'self'; style-src 'self' 'unsafe-inline' https://fonts.googleapis.com; font-src 'self' https://fonts.gstatic.com; img-src 'self' data:; connect-src 'self' https://formspree.io; form-action 'self' https://formspree.io; base-uri 'self'; object-src 'none'; upgrade-insecure-requests">
+  <meta name="referrer" content="strict-origin-when-cross-origin">
   <meta name="description" content="RE FIREへのお問い合わせ。防火管理者の外部委託の無料診断・ご相談はこちら。元消防士の専門スタッフが丁寧に対応いたします。">
   <title>お問い合わせ｜RE FIRE - 防火管理者の外部委託・消防安全コンサルティング</title>
-  <link rel="stylesheet" href="styles.css?v=20250917a" />
+  <link rel="stylesheet" href="styles.css?v=20261124" />
   <link rel="icon" type="image/jpeg" href="./logo/3BD52A16-41AE-4569-9508-0B5A617F9B5C.jpeg">
 </head>
 <body>
@@ -64,10 +66,10 @@
               action="https://formspree.io/f/xandkqle"
               method="POST" accept-charset="UTF-8">
 
-          <!-- Honeypot field for enhanced spam protection -->
-          <div style="display: none;">
-            <label for="bot-field">このフィールドは入力しないでください：</label>
-            <input type="text" name="bot-field" id="bot-field" tabindex="-1" autocomplete="off">
+          <!-- スパム対策：Formspree が解釈するハニーポット。人には表示しない -->
+          <div class="form-honeypot" aria-hidden="true">
+              <label for="gotcha">このフィールドは入力しないでください</label>
+              <input type="text" name="_gotcha" id="gotcha" tabindex="-1" autocomplete="off">
           </div>
 
           <div class="form-group">
@@ -148,7 +150,6 @@
       <p>&copy; 2025 株式会社RE FIRE. All rights reserved.</p>
     </div>
   </footer>
-
-  <script src="./script.js"></script>
+  <script src="./script.js?v=20261124" defer></script>
 </body>
 </html>

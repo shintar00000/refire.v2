@@ -3,6 +3,8 @@
 <head>
   <meta charset="utf-8" />
   <meta name="viewport" content="width=device-width, initial-scale=1" />
+  <meta http-equiv="Content-Security-Policy" content="default-src 'self'; script-src 'self'; style-src 'self' 'unsafe-inline' https://fonts.googleapis.com; font-src 'self' https://fonts.gstatic.com; img-src 'self' data:; connect-src 'self' https://formspree.io; form-action 'self' https://formspree.io; base-uri 'self'; object-src 'none'; upgrade-insecure-requests">
+  <meta name="referrer" content="strict-origin-when-cross-origin">
   <meta name="description" content="共同住宅／商業施設／複合施設に対応。防火管理者の受託を中心に、消防計画・避難訓練・点検の段取りを一元化。近畿＋三重、月額9,800円〜、まずは無料の初期チェック。">
   <meta name="keywords" content="防火管理,外部委託,業務委託,選任,元消防士,近畿,大阪,共同住宅,商業施設">
   <title>防火管理の外部委託（業務委託）なら｜元消防士が選任・計画・訓練・点検まで一括対応｜RE FIRE</title>
@@ -16,7 +18,7 @@
   <meta property="og:site_name" content="RE FIRE" />
   <meta name="twitter:card" content="summary" />
 
-  <link rel="stylesheet" href="../styles.css?v=20250917a" />
+  <link rel="stylesheet" href="../styles.css?v=20261124" />
   <link rel="icon" type="image/jpeg" href="../logo/3BD52A16-41AE-4569-9508-0B5A617F9B5C.jpeg">
 
   <!-- JSON-LD Structured Data -->
@@ -41,29 +43,30 @@
         {"@type":"Offer","itemOffered":{"@type":"Service","name":"消防設備点検 の業者手配"}}
       ]
     },
-    "priceRange":"¥10,000～",
-    "sameAs":[
-      "https://maps.google.com/?cid=...","https://x.com/..."]
+    "priceRange":"¥10,000～"
   }
   </script>
 </head>
 <body>
   <!-- 共通ヘッダー -->
   <header class="site-header">
-    <nav class="navbar">
+    <nav class="navbar" aria-label="メインナビゲーション">
       <div class="nav-container">
         <div class="nav-logo">
           <a href="../index.html">
             <img src="../logo/3BD52A16-41AE-4569-9508-0B5A617F9B5C.jpeg" alt="RE FIRE Logo" class="logo">
           </a>
         </div>
-        <div class="nav-menu">
+        <div class="nav-menu" id="nav-menu">
           <a href="../index.html">ホーム</a>
           <a class="active" href="index.html">防火管理 外部委託</a>
           <a href="../services.html">サービス一覧</a>
           <a href="../pricing.html">料金</a>
           <a href="../company.html">会社概要</a>
           <a class="cta" href="../contact.html">お問い合わせ</a>
+        </div>
+        <div class="nav-hamburger" id="nav-hamburger" aria-label="メニュー" role="button" tabindex="0">
+          <span></span><span></span><span></span>
         </div>
       </div>
     </nav>
@@ -102,7 +105,7 @@
           </div>
 
           <!-- 対応エリア -->
-          <p class="note legal-note" style="margin-top:1rem;font-size:0.9rem;line-height:1.7;">※消防計画は、当社スタッフが貴物件の防火管理者に選任されたうえで、防火管理者本人として作成し届け出ます。防火管理者をお引き受けしない形での、消防計画の作成だけのご依頼はお受けしていません。防火管理者の選任届は、管理権原者様ご自身で記入し、消防署へ提出していただきます。記入の仕方は当社がご案内します。</p>
+          <p class="note legal-note">※消防計画は、当社スタッフが貴物件の防火管理者に選任されたうえで、防火管理者本人として作成し届け出ます。防火管理者をお引き受けしない形での、消防計画の作成だけのご依頼はお受けしていません。防火管理者の選任届は、管理権原者様ご自身で記入し、消防署へ提出していただきます。記入の仕方は当社がご案内します。</p>
           <p class="coverage-area">対応エリア：近畿＋三重（大阪・兵庫・京都・奈良・滋賀・和歌山・三重）</p>
         </div>
       </section>
@@ -486,5 +489,6 @@
       margin-top: 1rem;
     }
   </style>
+  <script src="../script.js?v=20261124" defer></script>
 </body>
 </html>
