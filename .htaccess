@@ -1,141 +1,43 @@
-# 🔒 RE FIRE - ULTRA SYNC SECURITY FRAMEWORK
-# 最高レベルのセキュリティと最適化パフォーマンスを実現
+# RE FIRE - Apache 用の設定
+# Apache のサーバーで公開する場合だけ使われる。GitHub Pages では読まれない。
+# .htaccess で使えない ServerTokens / ServerSignature や、
+# 存在しないエラーページの指定は、サーバーエラーの原因になるため置かない。
 
-# 🛡️ ULTRA SECURITY HEADERS - Maximum Protection with Ultra Sync
-Header always set Content-Security-Policy "\
-  default-src 'self'; \
-  script-src 'self' 'unsafe-inline' https://fonts.googleapis.com https://unpkg.com/web-vitals@3 https://formspree.io; \
-  style-src 'self' 'unsafe-inline' https://fonts.googleapis.com https://fonts.gstatic.com; \
-  font-src 'self' https://fonts.gstatic.com data:; \
-  img-src 'self' data: https: blob:; \
-  connect-src 'self' https://formspree.io; \
-  form-action 'self' https://formspree.io; \
-  frame-ancestors 'none'; \
-  base-uri 'self'; \
-  object-src 'none'; \
-  media-src 'self'; \
-  upgrade-insecure-requests; \
-  block-all-mixed-content"
-
-# 🔐 Multi-Layer Security Headers (Ultra Sync)
-Header always set X-Frame-Options "DENY"
-Header always set X-Content-Type-Options "nosniff"
-Header always set X-XSS-Protection "1; mode=block"
-Header always set Referrer-Policy "strict-origin-when-cross-origin"
-Header always set Cross-Origin-Embedder-Policy "require-corp"
-Header always set Cross-Origin-Opener-Policy "same-origin"
-Header always set Cross-Origin-Resource-Policy "same-origin"
-
-# 🚫 Advanced Permissions Policy (Ultra Sync)
-Header always set Permissions-Policy "\
-  camera=(), \
-  microphone=(), \
-  geolocation=(), \
-  payment=(), \
-  usb=(), \
-  magnetometer=(), \
-  gyroscope=(), \
-  accelerometer=(), \
-  ambient-light-sensor=(), \
-  autoplay=(), \
-  battery=(), \
-  display-capture=(), \
-  document-domain=(), \
-  encrypted-media=(), \
-  fullscreen=(), \
-  picture-in-picture=()"
-
-# 🔒 HTTPS Enforcement (Ultra Sync - HTTPS環境でのみ有効)
-# Header always set Strict-Transport-Security "max-age=63072000; includeSubDomains; preload"
-
-# ⚡ ULTRA SYNC PERFORMANCE OPTIMIZATION
-<IfModule mod_deflate.c>
-    # Ultra High-Performance Compression
-    AddOutputFilterByType DEFLATE text/plain
-    AddOutputFilterByType DEFLATE text/html
-    AddOutputFilterByType DEFLATE text/xml
-    AddOutputFilterByType DEFLATE text/css
-    AddOutputFilterByType DEFLATE text/javascript
-    AddOutputFilterByType DEFLATE application/xml
-    AddOutputFilterByType DEFLATE application/xhtml+xml
-    AddOutputFilterByType DEFLATE application/rss+xml
-    AddOutputFilterByType DEFLATE application/javascript
-    AddOutputFilterByType DEFLATE application/x-javascript
-    AddOutputFilterByType DEFLATE application/json
-    AddOutputFilterByType DEFLATE application/ld+json
-    AddOutputFilterByType DEFLATE image/svg+xml
-    AddOutputFilterByType DEFLATE font/truetype
-    AddOutputFilterByType DEFLATE font/opentype
-</IfModule>
-
-# 🚀 ULTRA SYNC CACHING STRATEGY
-<IfModule mod_expires.c>
-    ExpiresActive On
-    # Ultra Long-term Caching for Static Assets
-    ExpiresByType text/css "access plus 1 year"
-    ExpiresByType application/javascript "access plus 1 year"
-    ExpiresByType application/x-javascript "access plus 1 year"
-    ExpiresByType image/png "access plus 1 year"
-    ExpiresByType image/jpg "access plus 1 year"
-    ExpiresByType image/jpeg "access plus 1 year"
-    ExpiresByType image/gif "access plus 1 year"
-    ExpiresByType image/webp "access plus 1 year"
-    ExpiresByType image/svg+xml "access plus 1 year"
-    ExpiresByType font/truetype "access plus 1 year"
-    ExpiresByType font/opentype "access plus 1 year"
-    ExpiresByType font/woff "access plus 1 year"
-    ExpiresByType font/woff2 "access plus 1 year"
-    # Dynamic Content Optimization
-    ExpiresByType text/html "access plus 1 hour"
-    ExpiresByType application/json "access plus 1 hour"
-</IfModule>
-
-# 🛡️ ULTRA SYNC FILE ACCESS CONTROL
-<Files ".htaccess">
-    Require all denied
-</Files>
-
-<Files "*.md">
-    Require all denied
-</Files>
-
-<Files "*.log">
-    Require all denied
-</Files>
-
-<Files "*.txt">
-    Require all denied
-</Files>
-
-<Files "*.bak">
-    Require all denied
-</Files>
-
-<Files "*.sql">
-    Require all denied
-</Files>
-
-# 🔒 Ultra Security Information Hiding
-ServerTokens Prod
-ServerSignature Off
-
-# 🎯 Ultra Performance Headers
 <IfModule mod_headers.c>
-    # Ultra Sync Performance Boost
-    Header set X-UA-Compatible "IE=edge"
-    Header set X-Powered-By "RE FIRE Ultra Sync"
+    # コンテンツセキュリティポリシー（各 HTML の meta と同じ内容 + frame-ancestors）
+    Header always set Content-Security-Policy "default-src 'self'; script-src 'self'; style-src 'self' 'unsafe-inline' https://fonts.googleapis.com; font-src 'self' https://fonts.gstatic.com; img-src 'self' data:; connect-src 'self' https://formspree.io; form-action 'self' https://formspree.io; frame-ancestors 'none'; base-uri 'self'; object-src 'none'; upgrade-insecure-requests"
 
-    # Cache Control for Ultra Performance
-    <FilesMatch "\.(css|js|png|jpg|jpeg|gif|webp|svg|woff|woff2|ttf|otf)$">
+    Header always set X-Frame-Options "DENY"
+    Header always set X-Content-Type-Options "nosniff"
+    Header always set Referrer-Policy "strict-origin-when-cross-origin"
+    Header always set Cross-Origin-Opener-Policy "same-origin"
+    Header always set Permissions-Policy "camera=(), microphone=(), geolocation=(), payment=(), usb=(), magnetometer=(), gyroscope=(), accelerometer=(), display-capture=()"
+
+    # HTTPS で公開していることを確認してから有効にする
+    # Header always set Strict-Transport-Security "max-age=31536000; includeSubDomains"
+
+    # サーバーの種類を外に出さない
+    Header always unset X-Powered-By
+    Header unset X-Powered-By
+
+    # CSS と JS は URL に ?v= を付けて更新するので、長くキャッシュしてよい
+    <FilesMatch "\.(css|js|png|jpg|jpeg|gif|webp|svg|woff|woff2)$">
         Header set Cache-Control "public, max-age=31536000, immutable"
     </FilesMatch>
-
     <FilesMatch "\.(html|htm)$">
         Header set Cache-Control "public, max-age=3600, must-revalidate"
     </FilesMatch>
 </IfModule>
 
-# 🚨 Ultra Sync Error Handling
-ErrorDocument 404 /404.html
-ErrorDocument 403 /403.html
-ErrorDocument 500 /500.html
+<IfModule mod_deflate.c>
+    AddOutputFilterByType DEFLATE text/html text/plain text/css text/javascript application/javascript application/json application/ld+json image/svg+xml
+</IfModule>
+
+# 公開する必要のないファイルとフォルダ
+<FilesMatch "^\.|\.(md|log|bak|sql)$">
+    Require all denied
+</FilesMatch>
+<IfModule mod_alias.c>
+    RedirectMatch 404 /\.(git|claude)(/|$)
+</IfModule>
+

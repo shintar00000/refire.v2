@@ -3,6 +3,8 @@
 <head>
     <meta charset="UTF-8">
     <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <meta http-equiv="Content-Security-Policy" content="default-src 'self'; script-src 'self'; style-src 'self' 'unsafe-inline' https://fonts.googleapis.com; font-src 'self' https://fonts.gstatic.com; img-src 'self' data:; connect-src 'self' https://formspree.io; form-action 'self' https://formspree.io; base-uri 'self'; object-src 'none'; upgrade-insecure-requests">
+    <meta name="referrer" content="strict-origin-when-cross-origin">
     <meta name="description" content="株式会社RE FIRE プライバシーポリシー - 個人情報の取り扱いについて">
     <title>プライバシーポリシー | 株式会社RE FIRE</title>
     
@@ -14,7 +16,7 @@
     <link rel="preconnect" href="https://fonts.gstatic.com" crossorigin>
     <link href="https://fonts.googleapis.com/css2?family=Noto+Sans+JP:wght@400;500;700;900&family=Inter:wght@400;500;600;700;800&display=swap" rel="stylesheet">
     
-    <link rel="stylesheet" href="./styles.css">
+    <link rel="stylesheet" href="./styles.css?v=20261124">
 </head>
 <body>
     <header>
@@ -28,7 +30,7 @@
 
                 <div class="nav-menu" id="nav-menu">
                     <a href="index.html" class="nav-link">ホーム</a>
-                    <a href="services.html" class="nav-link">防火管理代行</a>
+                    <a href="services.html" class="nav-link">防火管理者の外部委託</a>
                     <a href="pricing.html" class="nav-link">料金</a>
                     <a href="services.html#others" class="nav-link">サービス一覧</a>
                     <a href="company.html" class="nav-link">会社概要</a>
@@ -84,7 +86,7 @@
                     <p>収集した個人情報は、以下の目的で利用いたします：</p>
                     <ul>
                         <li>お問い合わせ・ご相談への回答・対応</li>
-                        <li>防火管理代行サービス等のご提供</li>
+                        <li>防火管理者の外部委託サービス等のご提供</li>
                         <li>サービスに関する重要なお知らせの送付</li>
                         <li>サービス向上のための統計データの作成（個人を特定できない形式）</li>
                         <li>法令に基づく対応</li>
@@ -155,7 +157,7 @@
                 <div class="footer-links">
                     <h4>サービス</h4>
                     <ul>
-                        <li><a href="./index.html#service">防火管理代行</a></li>
+                        <li><a href="./index.html#service">防火管理者の外部委託</a></li>
                         <li><a href="./index.html#services">その他サービス</a></li>
                         <li><a href="./index.html#about">会社概要</a></li>
                         <li><a href="./index.html#contact">お問い合わせ</a></li>
@@ -167,5 +169,6 @@
             </div>
         </div>
     </footer>
+  <script src="./script.js?v=20261124" defer></script>
 </body>
 </html>
